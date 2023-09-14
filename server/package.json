@@ -1,0 +1,11 @@
+{
+  "name": "esgi-sixt-graphql-server",
+  "version": "1.0.0",
+  "description": "API NodeJS en GraphQL",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "EOE (ESGI)",
+  "license": "ISC"
+}
