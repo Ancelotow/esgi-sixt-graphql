@@ -1,4 +1,12 @@
-import {GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString} from "graphql";
+import {
+    GraphQLFloat,
+    GraphQLID,
+    GraphQLInt,
+    GraphQLList,
+    GraphQLNonNull,
+    GraphQLObjectType,
+    GraphQLString
+} from "graphql";
 import {vehicleType} from "./vehicleType";
 import Rent from "../../../domain/entities/rent";
 import VehicleController from "../../../domain/controllers/vehicleController";

@@ -1,5 +1,5 @@
 import BrandController from "../../domain/controllers/brandController";
-import {GraphQLList, GraphQLObjectType} from "graphql";
+import {GraphQLList, GraphQLNonNull, GraphQLObjectType} from "graphql";
 import {brandType} from "./types/brandType";
 import {typeVehicleType} from "./types/typeVehicleType";
 import VehicleTypeController from "../../domain/controllers/vehicleTypeController";
@@ -17,6 +17,9 @@ import {fuelType} from "./types/fuelType";
 import FuelController from "../../domain/controllers/fuelController";
 import {rentType} from "./types/rentType";
 import RentController from "../../domain/controllers/rentController";
+import {connectionFromArraySlice, forwardConnectionArgs, getOffsetWithDefault} from "graphql-relay";
+import {rentConnection} from "./connection/rentConnection";
+import {vehicleConnection} from "./connection/vehicleConnection";
 
 export default new GraphQLObjectType({
     name: 'Query',
@@ -46,16 +49,32 @@ export default new GraphQLObjectType({
             resolve: () => CenterController.getAll()
         },
         vehicles: {
-            type: new GraphQLList(vehicleType),
-            resolve: () => VehicleController.getAll()
+            type: new GraphQLNonNull(vehicleConnection),
+            args: forwardConnectionArgs,
+            resolve: async (_, args) => {
+                const offset = getOffsetWithDefault(args.after, 0);
+                let vehicles = await  VehicleController.getAll()
+                return connectionFromArraySlice(vehicles, args, {
+                    sliceStart: offset,
+                    arrayLength: vehicles.length,
+                })
+            }
         },
         fuels: {
             type: new GraphQLList(fuelType),
             resolve: () => FuelController.getAll()
         },
         rents: {
-            type: new GraphQLList(rentType),
-            resolve: () => RentController.getAll()
+            type: new GraphQLNonNull(rentConnection),
+            args: forwardConnectionArgs,
+            resolve: async (_, args) => {
+                const offset = getOffsetWithDefault(args.after, 0);
+                let rents = await  RentController.getAll()
+                return connectionFromArraySlice(rents, args, {
+                    sliceStart: offset,
+                    arrayLength: rents.length,
+                })
+            }
         }
     }
 });
