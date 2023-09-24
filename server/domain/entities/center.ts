@@ -2,7 +2,7 @@ class Center {
     id: number
     name: string
     address: string
-    insee_code: string
+    inseeCode: string
 }
 
 export default Center

@@ -1,7 +1,7 @@
 class Town {
-    insee_code: string
+    inseeCode: string
     name: string
-    zip_code: string
+    zipCode: string
 }
 
 export default Town
