@@ -15,6 +15,8 @@ import {vehicleType} from "./types/vehicleType";
 import VehicleController from "../../domain/controllers/vehicleController";
 import {fuelType} from "./types/fuelType";
 import FuelController from "../../domain/controllers/fuelController";
+import {rentType} from "./types/rentType";
+import RentController from "../../domain/controllers/rentController";
 
 export default new GraphQLObjectType({
     name: 'Query',
@@ -50,6 +52,10 @@ export default new GraphQLObjectType({
         fuels: {
             type: new GraphQLList(fuelType),
             resolve: () => FuelController.getAll()
+        },
+        rents: {
+            type: new GraphQLList(rentType),
+            resolve: () => RentController.getAll()
         }
     }
 });

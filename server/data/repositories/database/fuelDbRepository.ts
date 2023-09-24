@@ -11,6 +11,11 @@ class FuelDbRepository implements FuelRepository {
         return results.map(e => e.toEntity());
     }
 
+    async getByModel(idModel: number): Promise<Fuel[]> {
+        let results = await this._dataSource.getByModel(idModel);
+        return results.map(e => e.toEntity());
+    }
+
 }
 
 export default FuelDbRepository

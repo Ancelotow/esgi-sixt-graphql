@@ -14,7 +14,9 @@ import {colorType} from "./colorType";
 import ColorController from "../../../domain/controllers/colorController";
 import {centerType} from "./centerType";
 import CenterController from "../../../domain/controllers/centerController";
+import VehicleController from "../../../domain/controllers/vehicleController";
 
+// Ajouter un héritage sur les types de voitures
 const vehicleType = new GraphQLObjectType<Vehicle>({
     name: 'Vehicle',
     fields: {
@@ -37,6 +39,16 @@ const vehicleType = new GraphQLObjectType<Vehicle>({
         center: {
             type: GraphQLNonNull(centerType),
             resolve: (vehicle) => CenterController.getById(vehicle.centerId)
+        },
+        isAvailable: {
+            type: GraphQLNonNull(GraphQLBoolean),
+            resolve: async (vehicle) => {
+                let rent = await VehicleController.getVehicleLastRent(vehicle.id);
+                if(rent) {
+                    return rent.isFinished();
+                }
+                return true;
+            }
         }
     },
 })

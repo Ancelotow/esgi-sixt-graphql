@@ -15,6 +15,10 @@ class FuelController {
         return fuels.filter(fuel => fuel.id === id)[0];
     }
 
+    getByModel(idModel: number): Promise<Fuel[]> {
+        return this._repository.getByModel(idModel);
+    }
+
 }
 
 export default new FuelController();
