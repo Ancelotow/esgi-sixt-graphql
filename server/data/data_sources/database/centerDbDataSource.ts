@@ -9,7 +9,7 @@ class CenterDbDataSource {
         const query = new Query('SELECT id, name, address, insee_code FROM center')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new CenterDao(row.id, row.name, row.address, row.insee_code)
+            (row: any) => new CenterDao(row[0], row[1], row[2], row[3])
         );
     }
 

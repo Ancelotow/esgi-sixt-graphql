@@ -1,9 +1,10 @@
 import VehicleRepository from "../repositories/vehicleRepository";
 import Vehicle from "../entities/vehicle";
+import VehicleDbRepository from "../../data/repositories/database/vehicleDbRepository";
 
 class VehicleController {
 
-    private _repository: VehicleRepository;
+    private _repository: VehicleRepository = new VehicleDbRepository();
 
     getAll(): Promise<Vehicle[]> {
         return this._repository.getAll();

@@ -1,9 +1,10 @@
 import CenterRepository from "../repositories/centerRepository";
 import Center from "../entities/center";
+import CenterDbRepository from "../../data/repositories/database/centerDbRepository";
 
 class CenterController {
 
-    private _repository: CenterRepository;
+    private _repository: CenterRepository = new CenterDbRepository();
 
     getAll(): Promise<Center[]> {
         return this._repository.getAll();

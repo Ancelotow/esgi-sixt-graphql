@@ -1,9 +1,10 @@
 import TownRepository from "../repositories/townRepository";
 import Town from "../entities/town";
+import TownDbRepository from "../../data/repositories/database/townDbRepository";
 
 class TownController {
 
-    private _repository: TownRepository;
+    private _repository: TownRepository = new TownDbRepository();
 
     getAll(): Promise<Town[]> {
         return this._repository.getAll();
@@ -11,7 +12,7 @@ class TownController {
 
     async getByCode(code: string): Promise<Town> {
         let towns = await this._repository.getAll()
-        return towns.filter(town => town.insee_code === code)[0];
+        return towns.filter(town => town.inseeCode === code)[0];
     }
 
 }

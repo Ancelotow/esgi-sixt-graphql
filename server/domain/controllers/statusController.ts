@@ -1,9 +1,10 @@
 import StatusRepository from "../repositories/statusRepository";
 import Status from "../entities/status";
+import StatusDbRepository from "../../data/repositories/database/statusDbRepository";
 
 class StatusController {
 
-    private _repository: StatusRepository;
+    private _repository: StatusRepository = new StatusDbRepository();
 
     getAll(): Promise<Status[]> {
         return this._repository.getAll();

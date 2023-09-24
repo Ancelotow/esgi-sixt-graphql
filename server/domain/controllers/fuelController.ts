@@ -1,9 +1,10 @@
 import FuelRepository from "../repositories/fuelRepository";
 import Fuel from "../entities/fuel";
+import FuelDbRepository from "../../data/repositories/database/fuelDbRepository";
 
 class FuelController {
 
-    private _repository: FuelRepository;
+    private _repository: FuelRepository = new FuelDbRepository();
 
     getAll(): Promise<Fuel[]> {
         return this._repository.getAll();

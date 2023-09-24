@@ -1,9 +1,10 @@
 import ModelRepository from "../repositories/modelRepository";
 import Model from "../entities/model";
+import ModelDbRepository from "../../data/repositories/database/modelDbRepository";
 
 class ModelController {
 
-    private _repository: ModelRepository;
+    private _repository: ModelRepository = new ModelDbRepository();
 
     getAll(): Promise<Model[]> {
         return this._repository.getAll();

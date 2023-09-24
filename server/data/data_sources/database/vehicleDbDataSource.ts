@@ -8,7 +8,7 @@ class VehicleDbDataSource {
         const query = new Query('SELECT id, number_plate, nb_places, kilometrage, is_air_conditioner, amount_excluding, max_charge, max_speed_allowed, model_id, color_id, center_id FROM vehicle')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new VehicleDao(row.id, row.number_plate, row.nb_places, row.kilometrage, row.is_air_conditioner, row.amount_excluding, row.max_charge, row.max_speed_allowed, row.model_id, row.color_id, row.center_id)
+            (row: any) => new VehicleDao(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
         );
     }
 

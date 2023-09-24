@@ -8,7 +8,7 @@ class ColorDbDataSource {
         const query = new Query('SELECT id, name, hex FROM color')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new ColorDao(row.id, row.name, row.hex)
+            (row: any) => new ColorDao(row[0], row[1], row[2])
         );
     }
 

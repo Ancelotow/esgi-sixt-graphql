@@ -8,7 +8,7 @@ class FuelDbDataSource {
         const query = new Query('SELECT id, name FROM fuel')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new FuelDao(row.id, row.name)
+            (row: any) => new FuelDao(row[0], row[1])
         );
     }
 

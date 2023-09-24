@@ -8,7 +8,7 @@ class TownDbDataSource {
         const query = new Query('SELECT insee_code, name, zip_code FROM town')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new TownDao(row.insee_code, row.name, row.zip_code)
+            (row: any) => new TownDao(row[0], row[1], row[2])
         );
     }
 

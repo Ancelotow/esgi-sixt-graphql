@@ -8,7 +8,7 @@ class StatusDbDataSource {
         const query = new Query('SELECT id, name FROM status')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new StatusDao(row.id, row.name)
+            (row: any) => new StatusDao(row[0], row[1])
         );
     }
 

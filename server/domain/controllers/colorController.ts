@@ -1,9 +1,10 @@
 import ColorRepository from "../repositories/colorRepository";
 import Color from "../entities/color";
+import ColorDbRepository from "../../data/repositories/database/colorDbRepository";
 
 class ColorController {
 
-    private _repository: ColorRepository;
+    private _repository: ColorRepository = new ColorDbRepository();
 
     getAll(): Promise<Color[]> {
         return this._repository.getAll();

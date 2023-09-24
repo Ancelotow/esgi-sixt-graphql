@@ -8,7 +8,7 @@ class VehicleTypeDbDataSource {
         const query = new Query('SELECT id, name FROM vehicle_type')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
-            (row: any) => new VehicleTypeDao(row.id, row.name)
+            (row: any) => new VehicleTypeDao(row[0], row[1])
         );
     }
 

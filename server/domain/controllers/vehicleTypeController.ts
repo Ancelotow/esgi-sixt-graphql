@@ -1,9 +1,10 @@
 import VehicleTypeRepository from "../repositories/vehicleTypeRepository";
 import VehicleType from "../entities/vehicleType";
+import VehicleTypeDbRepository from "../../data/repositories/database/vehicleTypeDbRepository";
 
 class VehicleTypeController {
 
-    private _repository: VehicleTypeRepository;
+    private _repository: VehicleTypeRepository = new VehicleTypeDbRepository();
 
     getAll(): Promise<VehicleType[]> {
         return this._repository.getAll();

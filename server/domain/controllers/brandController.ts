@@ -1,11 +1,12 @@
 import BrandRepository from "../repositories/brandRepository";
 import Brand from "../entities/brand";
+import BrandDbRepository from "../../data/repositories/database/brandDbRepository";
 
 class BrandController {
 
-    private _repository: BrandRepository;
+    private _repository: BrandRepository = new BrandDbRepository();
 
-    getAll(): Promise<Brand[]> {
+    getAll(): Promise<Array<Brand>> {
         return this._repository.getAll();
     }
 
