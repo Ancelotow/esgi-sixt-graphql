@@ -12,7 +12,8 @@ class VehicleDao {
         public max_speed_allowed: number,
         public model_id: number,
         public color_id: number,
-        public center_id: number
+        public center_id: number,
+        public transmission_id: number
     ) {}
 
     toEntity() {
@@ -28,6 +29,7 @@ class VehicleDao {
         vehicle.modelId = this.model_id
         vehicle.colorId = this.color_id
         vehicle.centerId = this.center_id
+        vehicle.transmissionId = this.transmission_id
         return vehicle
     }
 }

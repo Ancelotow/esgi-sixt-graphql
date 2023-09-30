@@ -10,6 +10,7 @@ class Vehicle {
     modelId: number
     colorId: number
     centerId: number
+    transmissionId: number
 }
 
 export default Vehicle

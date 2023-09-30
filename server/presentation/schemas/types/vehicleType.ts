@@ -15,6 +15,7 @@ import ColorController from "../../../domain/controllers/colorController";
 import {centerType} from "./centerType";
 import CenterController from "../../../domain/controllers/centerController";
 import VehicleController from "../../../domain/controllers/vehicleController";
+import {transmissionSystemType} from "./transmissionSystemType";
 
 // Ajouter un héritage sur les types de voitures
 const vehicleType = new GraphQLObjectType<Vehicle>({
@@ -28,6 +29,10 @@ const vehicleType = new GraphQLObjectType<Vehicle>({
         amountExcluding: { type: GraphQLFloat },
         maxCharge: { type: GraphQLFloat },
         maxSpeedAllowed: { type: GraphQLFloat },
+        transmission: {
+            type: GraphQLNonNull(transmissionSystemType),
+            resolve: (vehicle) => vehicle.transmissionId
+        },
         model: {
             type: GraphQLNonNull(modelType),
             resolve: (vehicle) => ModelController.getById(vehicle.modelId)
