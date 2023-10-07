@@ -1,0 +1,400 @@
+"""
+Ville
+"""
+type Town {
+    """
+    Le code INSEE de la ville
+    """
+    inseeCode: String!
+
+    """
+    Le nom de la ville
+    """
+    name: String!
+
+    """
+    Le code postal de la ville
+    """
+    zipCode: String!
+}
+
+"""
+Centre de location des véhicules
+"""
+type Center {
+    """
+    L'id du centre
+    """
+    id: ID!
+
+    """
+    Nom du centre
+    """
+    name: String!
+
+    """
+    L'adresse du centre
+    """
+    address: String!
+
+    """
+    La ville où est situé le centre
+    """
+    town: Town!
+}
+
+"""
+Type de véhicule
+"""
+type VehicleType {
+    """
+    L'id du type de véhicule
+    """
+    id: ID!
+
+    """
+    Le nom du type de véhicule
+    """
+    name: String!
+}
+
+"""
+Carburant
+"""
+type Fuel {
+    """
+    L'id du carburant
+    """
+    id: ID!
+
+    """
+    Le nom du carburant
+    """
+    name: String!
+}
+
+"""
+Marque de voiture
+"""
+type Brand {
+    """
+    L'id de la marque
+    """
+    id: ID!
+
+    """
+    Nom de la marque
+    """
+    name: String!
+
+    """
+    URL du logo de la marque
+    """
+    logo: String!
+}
+
+type Model {
+    """
+    L'id du modèle
+    """
+    id: ID!
+
+    """
+    Nom du modèle
+    """
+    name: String!
+
+    """
+    L'année de production du modèle
+    """
+    releaseYear: Int!
+
+    """
+    La marque du modèle
+    """
+    brand: Brand!
+
+    """
+    Le type de véhicule du modèle
+    """
+    type: VehicleType!
+
+    """
+    Les carburants possible du modèle
+    """
+    fuels: [Fuel!]
+}
+
+"""
+Type de transmission d'un véhicule
+"""
+enum TransmissionSystemType {
+    """
+    Boîte de vitesse manuelle
+    """
+    MANUAL,
+
+    """
+    Boîte de vitesse automatique
+    """
+    AUTOMATIC
+}
+
+"""
+Couleur d'un véhicule
+"""
+type Color {
+    """
+    L'id de la couleur
+    """
+    id: ID!
+
+    """
+    Le nom de la couleur
+    """
+    name: String!
+
+    """
+    Le code hexadécimal de la couleur
+    """
+    hex: String!
+}
+
+"""
+Status d'une location
+"""
+enum Status {
+    """
+    La demande de location est en cours de traitement
+    """
+    IN_PROCESS,
+
+    """
+    En attente de paiement pour la location
+    """
+    WAITING_PAYMENT,
+
+    """
+    Le véhicule est loué
+    """
+    RENTED
+
+    """
+    La location est annulée
+    """
+    CANCELLED
+
+    """
+    Le véhicule est retourné
+    """
+    VEHICLE_RETURNED
+
+    """
+    La location est terminée
+    """
+    RENT_FINISHED
+}
+
+"""
+Un véhicule
+"""
+type Vehicle {
+    """
+    L'id du véhicule
+    """
+    id: ID!
+
+    """
+    La plaque d'immatriculation du véhicule
+    """
+    numberPlate: String!
+
+    """
+    Le nombre de places dans le véhicule
+    """
+    nbPlaces: Int!
+
+    """
+    Le kilométrage du véhicule
+    """
+    kilometrage: Float!
+
+    """
+    Si le véhicule dispose de la climatisation
+    """
+    isAirConditioner: Boolean!
+
+    """
+    Montant HT de la location du véhicule par jour
+    """
+    amountExcluding: Float
+
+    """
+    La charge maximale du véhicule
+    """
+    maxCharge: Float
+
+    """
+    La vitesse maximale autorisée du véhicule
+    """
+    maxSpeedAllowed: Float
+
+    """
+    Le type de transmission du véhicule
+    """
+    transmission: TransmissionSystemType!
+
+    """
+    Le modèle du véhicule
+    """
+    model: Model!
+
+    """
+    La couleur du véhicule
+    """
+    color: Color!
+
+    """
+    Le centre de location où est situé le véhicule
+    """
+    center: Center!
+
+    """
+    Si le véhicule est disponible à la location
+    """
+    isAvailable: Boolean!
+}
+
+"""
+Location de véhicule
+"""
+type Rent {
+    """
+    L'id de la location
+    """
+    id: ID!
+
+    """
+    Le nombre de jour de la location
+    """
+    nbDays: Int!
+
+    """
+    Le montant HT de la location
+    """
+    amountExcluding: Float!
+
+    """
+    Le taux TVA de la location
+    """
+    vatRate: Float!
+
+    """
+    La date de début de la location
+    """
+    rentAt: String!
+
+    """
+    La date de création de la demande de location
+    """
+    createdAt: String!
+
+    """
+    Le véhicule loué
+    """
+    vehicle: Vehicle!
+
+    """
+    Le status de la demande de location
+    """
+    status: Status!
+}
+
+
+type PageInfo {
+    hasNextPage: Boolean
+    hasPreviousPage: Boolean
+    startCursor: String
+    endCursor: String
+}
+
+interface Edge {
+    cursor: String
+}
+
+interface Connection {
+    pageInfo: PageInfo
+}
+
+type VehicleEdge implements Edge {
+    cursor: String
+    node: Vehicle
+}
+
+type VehicleConnection implements Connection {
+    pageInfo: PageInfo
+    edges: [VehicleEdge]
+}
+
+type RentEdge implements Edge {
+    cursor: String
+    node: Rent
+}
+
+type RentConnection implements Connection {
+    pageInfo: PageInfo
+    edges: [RentEdge]
+}
+
+"""
+Requêtes
+"""
+type Query {
+    """
+    Liste des marques de véhicules
+    """
+    brands: [Brand]
+
+    """
+    Liste des modèles de véhicules
+    """
+    models: [Model]
+
+    """
+    Liste des types de véhicules
+    """
+    vehicleTypes: [VehicleType]
+
+    """
+    Liste des couleurs
+    """
+    colors: [Color]
+
+    """
+    Liste des villes
+    """
+    towns: [Town]
+
+    """
+    Liste des centres de location
+    """
+    centers: [Center]
+
+    """
+    Liste des véhicules (avec pagination par curseur)
+    """
+    vehicles: VehicleConnection!
+
+    """
+    Liste des carburants
+    """
+    fuels: [Fuel]
+
+    """
+    Liste des locations (avec pagination par curseur)
+    """
+    rents: RentConnection!
+}
+
+
+
