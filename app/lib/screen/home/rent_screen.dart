@@ -4,14 +4,20 @@ import 'package:app/screen/home/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class RentScreen extends StatefulWidget {
+  static const String routeName = '/RentScreen';
+
+  static void navigateTo(BuildContext context) {
+    Navigator.of(context).pushNamed(routeName);
+  }
+
+  const RentScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _RentScreenState createState() => _RentScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _RentScreenState extends State<RentScreen> {
   int _selectedPageIndex = 0;
 
   void setSelectedIndex(int index) {
