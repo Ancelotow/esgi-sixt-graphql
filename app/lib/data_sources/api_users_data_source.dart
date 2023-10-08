@@ -1,8 +1,25 @@
+import 'dart:js';
+
 import 'package:app/data_sources/users_data_source.dart';
 import 'package:app/models/users.dart';
 import 'package:dbcrypt/dbcrypt.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ApiUsersDataSource extends UsersDataSource {
+  late final HttpLink httpLink;
+  late final ValueNotifier<GraphQLClient> client;
+
+  ApiUsersDataSource() {
+    httpLink = HttpLink("http://localhost:4000/graphql");
+    client = ValueNotifier<GraphQLClient>(
+      GraphQLClient(
+        link: httpLink,
+        cache: GraphQLCache(),
+      ),
+    );
+  }
+
   @override
   Future<String> addUser(User user) {
     // TODO: implement addUser
@@ -16,18 +33,58 @@ class ApiUsersDataSource extends UsersDataSource {
   }
 
   @override
-  Future<void> loginUser(User user) {
-    // TODO: implement loginUser
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<User> profilUser(String pseudo) {
+  Future<void> loginUser(User user) async {
     // TODO: implement profilUser
     throw UnimplementedError();
   }
 
-  /*
+  @override
+  Future<User> profilUser(String pseudo) async {
+    const String profilUserQuery = r'''
+    query {
+      user(pseudo: $pseudo) {
+        id
+        lastname
+        firstname
+        email
+        birthdayDate
+      }
+    }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(profilUserQuery),
+      variables: {
+        'pseudo': pseudo,
+      },
+    );
+
+    final QueryResult result =
+        await GraphQLProvider.of(context as BuildContext).value.query(options);
+    if (result.hasException) {
+      // Gérer les erreurs
+      throw Exception(result.exception);
+    } else {
+      // Accéder aux données de la réponse
+      final Map<String, dynamic>? data = result.data;
+      if (data == null) {
+        throw Exception("Aucune donnée renvoyée par la requête GraphQL");
+      }
+      final Map<String, dynamic> userData = data['user'];
+
+      final user = User(
+        id: userData['id'],
+        firstname: userData['firstname'],
+        lastname: userData['lastname'],
+        email: userData['email'],
+        birthdayDate: userData['birthdayDate'],
+        password: '',
+      );
+      return user;
+    }
+  }
+
+/*
   @override
   Future<String> addUser(User user) async {
     final querySnapshot = await collectionReference
@@ -74,28 +131,7 @@ class ApiUsersDataSource extends UsersDataSource {
     });
   }
 
-  @override
-  Future<void> loginUser(User user) async {
-    final querySnapshot = await collectionReference
-        .where('pseudo', isEqualTo: user.pseudo)
-        .limit(1)
-        .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      final userStored = querySnapshot.docs.first;
-      final passwordStored = userStored['password'];
-
-      if (!passwordMatches(user.password, passwordStored)) {
-        throw Exception('Mot de passe incorrect');
-      }
-    } else {
-      throw Exception('Utilisateur non trouvé');
-    }
-  }
-
-  bool passwordMatches(String password, String hashedPassword) {
-    return DBCrypt().checkpw(password, hashedPassword);
-  }
 
   @override
   Future<User> profilUser(String pseudo) async {

@@ -11,7 +11,7 @@ class RegisterScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(routeName);
   }
 
-  final TextEditingController _pseudoController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   RegisterScreen({Key? key}) : super(key: key);
@@ -35,9 +35,9 @@ class RegisterScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: _pseudoController,
+              controller: _emailController,
               decoration: const InputDecoration(
-                labelText: "Mon pseudo",
+                labelText: "Mon email",
               ),
             ),
             TextField(
@@ -95,12 +95,12 @@ class RegisterScreen extends StatelessWidget {
 
   void _onAddUser(BuildContext context) {
     var bloc = BlocProvider.of<UsersBloc>(context);
-    if (_pseudoController.text != "" && _passwordController.text != "") {
+    if (_emailController.text != "" && _passwordController.text != "") {
       final hashedPassword =
           DBCrypt().hashpw(_passwordController.text, DBCrypt().gensalt());
       final user = User(
         id: '',
-        pseudo: _pseudoController.text,
+        email: _emailController.text,
         password: hashedPassword,
       );
       bloc.add(AddUser(user: user));

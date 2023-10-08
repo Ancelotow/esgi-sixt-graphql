@@ -11,7 +11,7 @@ class ConnexionScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(routeName);
   }
 
-  final TextEditingController _pseudoController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   ConnexionScreen({Key? key}) : super(key: key);
@@ -35,9 +35,9 @@ class ConnexionScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: _pseudoController,
+              controller: _emailController,
               decoration: const InputDecoration(
-                labelText: "Pseudo",
+                labelText: "Email",
               ),
             ),
             TextField(
@@ -93,10 +93,10 @@ class ConnexionScreen extends StatelessWidget {
 
   void _onLogin(BuildContext context) {
     var bloc = BlocProvider.of<UsersBloc>(context);
-    if (_pseudoController.text != "" && _passwordController.text != "") {
+    if (_emailController.text != "" && _passwordController.text != "") {
       final user = User(
         id: '',
-        pseudo: _pseudoController.text,
+        email: _emailController.text,
         password: _passwordController.text,
       );
       bloc.add(LoginUser(user: user));

@@ -8,15 +8,31 @@ import 'package:app/users_bloc/users_bloc.dart';
 import 'package:app/repository/users_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
+
+  //Initializes the HiveStore used for caching
+  await initHiveForFlutter();
 }
+
+final HttpLink httpLink = HttpLink(
+  'http://localhost:4000/graphql',
+);
+
+ValueNotifier<GraphQLClient> client = ValueNotifier(
+  GraphQLClient(
+    link: httpLink,
+    // The default store is the InMemoryStore, which does NOT persist to disk
+    cache: GraphQLCache(store: HiveStore()),
+  ),
+);
 
 class MyApp extends StatelessWidget {
   final User? user;
 
-  const MyApp({Key? key, this.user}) : super(key: key);
+  MyApp({Key? key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,44 +44,47 @@ class MyApp extends StatelessWidget {
         create: (context) => UsersBloc(
           RepositoryProvider.of<UsersRepository>(context),
         ),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            textTheme: const TextTheme(
-              bodySmall: TextStyle(
-                fontSize: 20,
-                color: Colors.blueGrey,
+        child: GraphQLProvider(
+          client: client,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodySmall: TextStyle(
+                  fontSize: 20,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              appBarTheme: const AppBarTheme(
+                iconTheme: IconThemeData(color: Colors.black),
+                color: Color(0xFFf9ffff), //<-- SEE HERE
               ),
             ),
-            appBarTheme: const AppBarTheme(
-              iconTheme: IconThemeData(color: Colors.black),
-              color: Color(0xFFf9ffff), //<-- SEE HERE
-            ),
+            routes: {
+              '/': (context) => const HomeScreen(),
+              ConnexionScreen.routeName: (context) => ConnexionScreen(),
+              RegisterScreen.routeName: (context) => RegisterScreen(),
+              RentScreen.routeName: (context) => const RentScreen(),
+            },
+            onGenerateRoute: (settings) {
+              Widget content = const SizedBox.shrink();
+              switch (settings.name) {
+                /*
+                        case ProfilScreen.routeName:
+                  final arguments = settings.arguments;
+                  if (arguments is User) {
+                    content = ProfilScreen(user: arguments);
+                  }
+                  break;
+                           */
+              }
+              return MaterialPageRoute(
+                builder: (context) {
+                  return content;
+                },
+              );
+            },
           ),
-          routes: {
-            '/': (context) => const HomeScreen(),
-            ConnexionScreen.routeName: (context) => ConnexionScreen(),
-            RegisterScreen.routeName: (context) => RegisterScreen(),
-            RentScreen.routeName: (context) => const RentScreen(),
-          },
-          onGenerateRoute: (settings) {
-            Widget content = const SizedBox.shrink();
-            switch (settings.name) {
-              /*
-                      case ProfilScreen.routeName:
-                final arguments = settings.arguments;
-                if (arguments is User) {
-                  content = ProfilScreen(user: arguments);
-                }
-                break;
-                         */
-            }
-            return MaterialPageRoute(
-              builder: (context) {
-                return content;
-              },
-            );
-          },
         ),
       ),
     );
