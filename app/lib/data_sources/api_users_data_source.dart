@@ -2,7 +2,6 @@ import 'dart:js';
 
 import 'package:app/data_sources/users_data_source.dart';
 import 'package:app/models/users.dart';
-import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -27,9 +26,40 @@ class ApiUsersDataSource extends UsersDataSource {
   }
 
   @override
-  Future<void> editUser(User user) {
-    // TODO: implement editUser
-    throw UnimplementedError();
+  Future<void> editUser(User user) async {
+    const String editUserMutation = r'''
+    mutation EditUser($id: String!, $lastname: String, $firstname: String, $birthdayDate: String, $email: String) {
+      updateUser(id: $id, lastname: lastname, firstname: firstname, birthdayDate: birthdayDate, email: email) {
+        id
+        lastname
+        firstname
+        birthdayDate
+        email
+      }
+    }
+    ''';
+
+    final MutationOptions options = MutationOptions(
+      document: gql(editUserMutation),
+      variables: {
+        'id': user.id,
+        'lastname': user.lastname,
+        'firstname': user.firstname,
+        'birthdayDate': user.birthdayDate,
+        'email': user.email,
+      },
+    );
+
+    final GraphQLClient client = GraphQLProvider.of(context as BuildContext).value;
+    final QueryResult result = await client.mutate(options);
+
+    if (result.hasException) {
+      // Gérer les erreurs
+      throw Exception(result.exception);
+    } else {
+      // Les données ont été mises à jour avec succès
+    }
+
   }
 
   @override
@@ -48,6 +78,13 @@ class ApiUsersDataSource extends UsersDataSource {
         firstname
         email
         birthdayDate
+        rents {
+          id
+          nbDays
+          amountExcluding
+          rentAt
+          vehicleId
+        }
       }
     }
     ''';
@@ -79,6 +116,7 @@ class ApiUsersDataSource extends UsersDataSource {
         email: userData['email'],
         birthdayDate: userData['birthdayDate'],
         password: '',
+        rents: data['user']['rents'],
       );
       return user;
     }
@@ -109,54 +147,6 @@ class ApiUsersDataSource extends UsersDataSource {
       'usersBlocked': [],
     });
     return response.id;
-  }
-
-  @override
-  Future<void> editUser(User user) async {
-    final querySnapshot = await collectionReference
-        .where('pseudo', isEqualTo: user.pseudo)
-        .limit(1)
-        .get();
-    final userPseudoFirestore = querySnapshot.docs.first;
-    if (userPseudoFirestore.id != user.id) {
-      throw Exception(
-          'Ce pseudo est déjà utilisé! Veuillez en choisir un autre');
-    }
-
-    await collectionReference.doc(user.id).update({
-      'avatarUrl': user.avatarUrl,
-      'pseudo': user.pseudo,
-      'firstname': user.firstname,
-      'lastname': user.lastname
-    });
-  }
-
-
-
-  @override
-  Future<User> profilUser(String pseudo) async {
-    final querySnapshot = await collectionReference
-        .where('pseudo', isEqualTo: pseudo)
-        .limit(1)
-        .get();
-
-    final userFirestore = querySnapshot.docs.first;
-
-    final friendList = userFirestore['friends'] as List<dynamic>;
-    final blockedFriendsList = userFirestore['usersBlocked'] as List<dynamic>;
-
-    final user = User(
-      id: userFirestore.id,
-      id_user: userFirestore['id_user'],
-      avatarUrl: userFirestore['avatarUrl'],
-      pseudo: userFirestore['pseudo'],
-      password: '',
-      firstname: userFirestore['firstname'],
-      lastname: userFirestore['lastname'],
-      friends: friendList.cast<String>(),
-      usersBlocked: blockedFriendsList.cast<String>(),
-    );
-    return user;
   }
   */
 }

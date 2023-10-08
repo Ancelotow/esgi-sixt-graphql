@@ -1,3 +1,5 @@
+import 'package:app/models/rents.dart';
+
 class User {
   final String id;
   final String password;
@@ -5,6 +7,7 @@ class User {
   final String? lastname;
   final String email;
   final String? birthdayDate;
+  final List<Rent>? rents;
 
 
   User({
@@ -14,6 +17,7 @@ class User {
     this.lastname,
     required this.email,
     this.birthdayDate,
+    this.rents,
   });
 
   User copyWith({
@@ -23,6 +27,7 @@ class User {
     String? lastname,
     String? email,
     String? birthdayDate,
+    List<Rent>? rents,
   }) {
     return User(
       id: id ?? this.id,
@@ -31,6 +36,7 @@ class User {
       lastname: lastname ?? this.lastname,
       email: email ?? this.email,
       birthdayDate: birthdayDate ?? this.birthdayDate,
+      rents: rents ?? this.rents,
     );
   }
 }
