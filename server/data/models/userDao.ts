@@ -19,3 +19,4 @@ class UserDao {
         return user;
     }
 }
+export default UserDao

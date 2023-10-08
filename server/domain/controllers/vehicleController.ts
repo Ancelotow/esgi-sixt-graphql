@@ -19,6 +19,10 @@ class VehicleController {
         return vehicles.filter(vehicle => vehicle.id === id)[0];
     }
 
+    async getAllFiltered(maximumKilometrage: number|null, minimumPlaces: number|null): Promise<Vehicle[]> {
+        return this._repository.getAllFiltered(maximumKilometrage, minimumPlaces);
+    }
+
     async getVehicleLastRent(id: number): Promise<Rent> {
         let rents = await this._rentRepository.getAll();
         let vehicleRents = rents.filter(rent => rent.vehicleId === id);

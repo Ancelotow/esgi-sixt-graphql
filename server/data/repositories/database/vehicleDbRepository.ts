@@ -11,6 +11,11 @@ class VehicleDbRepository implements VehicleRepository {
         return results.map(e => e.toEntity());
     }
 
+    async getAllFiltered(maximumKilometrage: number|null, minimumPlaces: number|null): Promise<Vehicle[]> {
+        let results = await this._dataSource.vehicleFilter(maximumKilometrage, minimumPlaces);
+        return results.map(e => e.toEntity());
+    }
+
 }
 
 export default VehicleDbRepository
