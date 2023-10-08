@@ -1,5 +1,5 @@
 import BrandController from "../../domain/controllers/brandController";
-import {GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType} from "graphql";
+import {GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLInputType, GraphQLInputObjectType} from "graphql";
 import {brandType} from "./types/brandType";
 import {typeVehicleType} from "./types/typeVehicleType";
 import {vehicleType} from "./types/vehicleType";
@@ -19,6 +19,7 @@ import RentController from "../../domain/controllers/rentController";
 import {connectionFromArraySlice, forwardConnectionArgs, getOffsetWithDefault} from "graphql-relay";
 import {rentConnection} from "./connection/rentConnection";
 import {vehicleConnection} from "./connection/vehicleConnection";
+import VehicleFilter from './inputs/VehicleFilterInput';
 
 export default new GraphQLObjectType({
     name: 'Query',
@@ -62,17 +63,13 @@ export default new GraphQLObjectType({
         vehiclesFilter: {
             type: new GraphQLList(vehicleType),
             args: {
-                maxKilometrage: {
-                    type: GraphQLInt,
-                    description: 'The maximum kilometrage of the car'
-                },
-                minimumPlaces: {
-                    type: GraphQLInt,
-                    description: 'The minimum places in the car'
+                filter: {
+                    type: VehicleFilter,
+                    description: 'The car filters'
                 }
             },
             resolve: async (_, args) => {
-                return await VehicleController.getAllFiltered(args.maxKilometrage, args.minimumPlaces)
+                return await VehicleController.getAllFiltered(args.filter.maxKilometrage, args.filter.minimumPlaces)
             }
         },
         fuels: {
