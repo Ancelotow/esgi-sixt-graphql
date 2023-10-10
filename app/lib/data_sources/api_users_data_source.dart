@@ -18,9 +18,9 @@ class ApiUsersDataSource extends UsersDataSource {
   }
 
   @override
-  Future<String> addUser(User user) {
+  Future<String> addUser(User user) async{
     const String registerUser = r'''
-    mutation AddUser($lastname: String, $firstname: String, $birthdayDate: String, $email: String, $password: String){
+    mutation AddUser($lastname: String!, $firstname: String!, $birthdayDate: String, $email: String!, $password: String!){
       addUser(input: {email: $email, password: $password, lastname: $lastname, firstname: $firstname, birthday_date: $birthdayDate}) {
         user{
           id
@@ -30,8 +30,25 @@ class ApiUsersDataSource extends UsersDataSource {
     }
     ''';
 
-    // TODO: implement addUser
-    throw UnimplementedError();
+    final QueryOptions options = QueryOptions(
+      document: gql(registerUser),
+      variables: {
+        'lastname': user.lastname,
+        'firstname': user.firstname,
+        'email': user.email,
+        'password': user.password,
+      },
+    );
+
+    final QueryResult result = await client.value.query(options);
+
+    if (result.hasException) {
+      print(result.exception.toString());
+      throw Exception('Erreur GraphQL: ${result.exception.toString()}');
+    } else {
+      final String idUser = result.data!['addUser']['user']['id'];
+      return idUser;
+    }
   }
 
   @override
@@ -101,7 +118,6 @@ class ApiUsersDataSource extends UsersDataSource {
     final QueryResult result = await client.value.query(options);
 
     if (result.hasException) {
-      print('chou : ${result.exception.toString()}');
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
       final String accessToken = result.data!['login']['session']['token'];

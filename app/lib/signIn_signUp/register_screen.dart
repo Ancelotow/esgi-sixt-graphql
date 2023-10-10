@@ -1,6 +1,5 @@
 import 'package:app/models/users.dart';
 import 'package:app/users_bloc/users_bloc.dart';
-import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,6 +12,8 @@ class RegisterScreen extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _firstnameController = TextEditingController();
+  final TextEditingController _lastnameController = TextEditingController();
 
   RegisterScreen({Key? key}) : super(key: key);
 
@@ -44,6 +45,18 @@ class RegisterScreen extends StatelessWidget {
               controller: _passwordController,
               decoration: const InputDecoration(
                 labelText: "Mon mot de passe",
+              ),
+            ),
+            TextField(
+              controller: _lastnameController,
+              decoration: const InputDecoration(
+                labelText: "Mon nom",
+              ),
+            ),
+            TextField(
+              controller: _firstnameController,
+              decoration: const InputDecoration(
+                labelText: "Mon prénom",
               ),
             ),
             const Spacer(),
@@ -95,13 +108,16 @@ class RegisterScreen extends StatelessWidget {
 
   void _onAddUser(BuildContext context) {
     var bloc = BlocProvider.of<UsersBloc>(context);
-    if (_emailController.text != "" && _passwordController.text != "") {
-      final hashedPassword =
-          DBCrypt().hashpw(_passwordController.text, DBCrypt().gensalt());
+    if (_emailController.text != "" &&
+        _passwordController.text != "" &&
+        _lastnameController.text != "" &&
+        _firstnameController.text != "") {
       final user = User(
         id: '',
         email: _emailController.text,
-        password: hashedPassword,
+        password: _passwordController.text,
+        lastname: _lastnameController.text,
+        firstname: _firstnameController.text,
       );
       bloc.add(AddUser(user: user));
     } else {
