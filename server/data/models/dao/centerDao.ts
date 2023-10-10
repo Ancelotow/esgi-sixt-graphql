@@ -1,4 +1,4 @@
-import Center from "../../domain/entities/center";
+import Center from "../../../domain/entities/center";
 
 class CenterDao {
     constructor(

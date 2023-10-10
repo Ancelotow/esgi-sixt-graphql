@@ -1,4 +1,4 @@
-import Town from "../../domain/entities/town";
+import Town from "../../../domain/entities/town";
 
 class TownDao {
     constructor(
