@@ -107,6 +107,6 @@ class ConnexionScreen extends StatelessWidget {
   }
 
   void _navigateToRentScreen(BuildContext context) async {
-    const RentScreen();
+    RentScreen.navigateTo(context);
   }
 }

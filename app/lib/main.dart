@@ -9,12 +9,15 @@ import 'package:app/repository/users_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hive/hive.dart';
+
 
 void main() async {
-  runApp(MyApp());
-
   //Initializes the HiveStore used for caching
   await initHiveForFlutter();
+  await Hive.openBox('SixtGi');
+
+  runApp(MyApp());
 }
 
 final HttpLink httpLink = HttpLink(

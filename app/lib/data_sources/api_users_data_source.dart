@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:app/data_sources/users_data_source.dart';
 import 'package:app/models/users.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +8,7 @@ class ApiUsersDataSource extends UsersDataSource {
   late final ValueNotifier<GraphQLClient> client;
 
   ApiUsersDataSource() {
-    httpLink = HttpLink("http://localhost:4000/graphql");
+    httpLink = HttpLink("http://192.168.1.107:4000/graphql");
     client = ValueNotifier<GraphQLClient>(
       GraphQLClient(
         link: httpLink,
@@ -21,12 +19,26 @@ class ApiUsersDataSource extends UsersDataSource {
 
   @override
   Future<String> addUser(User user) {
+    const String registerUser = r'''
+    mutation AddUser($lastname: String, $firstname: String, $birthdayDate: String, $email: String, $password: String){
+      addUser(input: {email: $email, password: $password, lastname: $lastname, firstname: $firstname, birthday_date: $birthdayDate}) {
+        user{
+          id
+          firstname
+        }
+      }
+    }
+    ''';
+
     // TODO: implement addUser
     throw UnimplementedError();
   }
 
   @override
   Future<void> editUser(User user) async {
+    // TODO: implement addUser
+    throw UnimplementedError();
+    /*
     const String editUserMutation = r'''
     mutation EditUser($id: String!, $lastname: String, $firstname: String, $birthdayDate: String, $email: String) {
       updateUser(id: $id, lastname: lastname, firstname: firstname, birthdayDate: birthdayDate, email: email) {
@@ -60,15 +72,19 @@ class ApiUsersDataSource extends UsersDataSource {
     } else {
       // Les données ont été mises à jour avec succès
     }
+     */
   }
 
   @override
   Future<void> loginUser(User user) async {
     const String loginUser = r'''
-    query Login($email: String!, $password: String!) {
-      auth {
-        login(email: email, password: password) {
-            accessToken
+    mutation Login($email: String!, $password: String!){
+      login(input: {email: $email, password: $password}) {
+        session {
+          token
+          user {
+            firstname
+          }
         }
       }
     }
@@ -85,15 +101,19 @@ class ApiUsersDataSource extends UsersDataSource {
     final QueryResult result = await client.value.query(options);
 
     if (result.hasException) {
+      print('chou : ${result.exception.toString()}');
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
-      final String accessToken = result.data!['auth']['login']['accessToken'];
+      final String accessToken = result.data!['login']['session']['token'];
       // Enregistrer l'accessToken par exemple.
     }
   }
 
   @override
   Future<User> profilUser(String pseudo) async {
+    // TODO: implement addUser
+    throw UnimplementedError();
+    /*
     const String profilUserQuery = r'''
     query {
       user(pseudo: $pseudo) {
@@ -144,6 +164,7 @@ class ApiUsersDataSource extends UsersDataSource {
       );
       return user;
     }
+     */
   }
 
 /*
