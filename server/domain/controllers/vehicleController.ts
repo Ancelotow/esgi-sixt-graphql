@@ -29,6 +29,10 @@ class VehicleController {
         return vehicleRents.sort((a, b) => a.rentAt.getTime() - b.rentAt.getTime())[0];
     }
 
+    async updateVehicle(id: number, kilometrage: number): Promise<Vehicle> {
+        return this._repository.updateVehicle(id, kilometrage);
+    }
+
 }
 
 export default new VehicleController();

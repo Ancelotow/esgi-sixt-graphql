@@ -35,6 +35,18 @@ class VehicleDbDataSource {
         );
     }
 
+    async updateVehicle(vehicleId: number, kilometrage: number): Promise<VehicleDao> {
+        const query = new Query(
+            'UPDATE vehicle SET kilometrage = $1 WHERE id = $2',
+            [kilometrage,vehicleId]
+        )
+        const result = await dbService.dbClient.execute(query);
+        return result.rows.map(
+            (row: any) => new VehicleDao(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
+            //(row: any) => new VehicleDao(row[0].id, row[0].number_plate, row[0].nb_places, row[0].kilometrage, row[0].is_air_conditioner,row[0].amount_excluding,row[0].max_charge,row[0].max_speed_allowed,row[0].model_id,row[0].color_id,row[0].center_id,row[0].transmission_id)
+        )[0];
+    }
+
 }
 
 export default VehicleDbDataSource
