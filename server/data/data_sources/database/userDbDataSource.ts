@@ -1,3 +1,4 @@
+import UserDao from "../../models/dao/userDao";
 import TownDao from "../../models/dao/townDao";
 import {Query} from "ts-postgres";
 import dbService from "../../dbService";
