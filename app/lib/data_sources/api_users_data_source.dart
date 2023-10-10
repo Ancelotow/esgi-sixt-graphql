@@ -50,7 +50,8 @@ class ApiUsersDataSource extends UsersDataSource {
       },
     );
 
-    final GraphQLClient client = GraphQLProvider.of(context as BuildContext).value;
+    final GraphQLClient client =
+        GraphQLProvider.of(context as BuildContext).value;
     final QueryResult result = await client.mutate(options);
 
     if (result.hasException) {
@@ -59,13 +60,36 @@ class ApiUsersDataSource extends UsersDataSource {
     } else {
       // Les données ont été mises à jour avec succès
     }
-
   }
 
   @override
   Future<void> loginUser(User user) async {
-    // TODO: implement profilUser
-    throw UnimplementedError();
+    const String loginUser = r'''
+    query Login($email: String!, $password: String!) {
+      auth {
+        login(email: email, password: password) {
+            accessToken
+        }
+      }
+    }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(loginUser),
+      variables: {
+        'email': user.email,
+        'password': user.password,
+      },
+    );
+
+    final QueryResult result = await client.value.query(options);
+
+    if (result.hasException) {
+      throw Exception('Erreur GraphQL: ${result.exception.toString()}');
+    } else {
+      final String accessToken = result.data!['auth']['login']['accessToken'];
+      // Enregistrer l'accessToken par exemple.
+    }
   }
 
   @override
