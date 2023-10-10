@@ -1,4 +1,4 @@
-import FuelDao from "../../models/fuelDao";
+import FuelDao from "../../models/dao/fuelDao";
 import dbService from "../../dbService";
 import {Query} from "ts-postgres";
 

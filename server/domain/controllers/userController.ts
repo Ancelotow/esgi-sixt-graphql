@@ -10,6 +10,14 @@ class UserController {
         return this.repository.getFromCredentials(email, password);
     }
 
+    addUser(user: User, password: string): Promise<User> {
+        return this.repository.addUser(user, password);
+    }
+
+    userExists(email: string): Promise<boolean> {
+        return this.repository.userExists(email);
+    }
+
 }
 
 export default new UserController();

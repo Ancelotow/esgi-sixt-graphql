@@ -1,6 +1,6 @@
 import {Query} from "ts-postgres";
 import dbService from "../../dbService";
-import VehicleTypeDao from "../../models/vehicleTypeDao";
+import VehicleTypeDao from "../../models/dao/vehicleTypeDao";
 
 class VehicleTypeDbDataSource {
 

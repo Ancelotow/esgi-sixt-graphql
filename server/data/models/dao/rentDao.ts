@@ -1,4 +1,4 @@
-import Rent from "../../domain/entities/rent";
+import Rent from "../../../domain/entities/rent";
 
 class RentDao {
     constructor(

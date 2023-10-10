@@ -1,4 +1,4 @@
-import Brand from "../../domain/entities/brand";
+import Brand from "../../../domain/entities/brand";
 
 class BrandDao {
     constructor(

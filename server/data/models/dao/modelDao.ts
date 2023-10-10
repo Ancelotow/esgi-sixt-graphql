@@ -1,4 +1,4 @@
-import Model from "../../domain/entities/model";
+import Model from "../../../domain/entities/model";
 
 class ModelDao {
     constructor(
