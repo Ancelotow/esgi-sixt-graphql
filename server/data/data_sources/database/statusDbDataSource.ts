@@ -1,4 +1,4 @@
-import StatusDao from "../../models/statusDao";
+import StatusDao from "../../models/dao/statusDao";
 import dbService from "../../dbService";
 import {Query} from "ts-postgres";
 

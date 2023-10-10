@@ -1,4 +1,4 @@
-import VehicleType from "../../domain/entities/vehicleType";
+import VehicleType from "../../../domain/entities/vehicleType";
 
 class VehicleTypeDao {
     constructor(

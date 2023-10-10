@@ -1,4 +1,4 @@
-import ColorDao from "../../models/colorDao";
+import ColorDao from "../../models/dao/colorDao";
 import dbService from "../../dbService";
 import {Query} from "ts-postgres";
 

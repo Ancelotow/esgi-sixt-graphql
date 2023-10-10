@@ -1,4 +1,4 @@
-import Fuel from "../../domain/entities/fuel";
+import Fuel from "../../../domain/entities/fuel";
 
 class FuelDao {
     constructor(
