@@ -1,8 +1,18 @@
-import UserDao from "../../models/userDao";
+import UserDao from "../../models/dao/userDao";
 import {Query} from "ts-postgres";
 import dbService from "../../dbService";
+import AddUserDto from "../../models/dto/addUserDto";
 
 class UserDbDataSource {
+
+    async userExists(email: string): Promise<boolean> {
+        const query = new Query(
+            'SELECT COUNT(*) FROM "user" WHERE email = $1',
+            [email]
+        )
+        const result = await dbService.dbClient.execute(query);
+        return result.rows[0][0] as number > 0;
+    }
 
     async getFromCredentials(email: string, password: string): Promise<UserDao | null> {
         const query = new Query(
@@ -15,6 +25,17 @@ class UserDbDataSource {
         }
         return result.rows.map(
             (row: any) => new UserDao(row[0], row[1], row[2], row[4], row[3])
+        )[0];
+    }
+
+    async addUser(user: AddUserDto): Promise<UserDao> {
+        const query = new Query(
+            'INSERT INTO "user" (lastname, firstname, email, password, birthday_date) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+            [user.lastname, user.firstname, user.email, user.password, user.birthday_date]
+        )
+        const result = await dbService.dbClient.execute(query);
+        return result.rows.map(
+            (row: any) => new UserDao(row[0], user.lastname, user.firstname, user.email, user.birthday_date)
         )[0];
     }
 

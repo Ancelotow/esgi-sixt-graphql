@@ -1,4 +1,4 @@
-import VehicleDao from "../../models/vehicleDao";
+import VehicleDao from "../../models/dao/vehicleDao";
 import {Query} from "ts-postgres";
 import dbService from "../../dbService";
 

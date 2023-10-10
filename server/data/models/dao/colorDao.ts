@@ -1,4 +1,4 @@
-import Color from "../../domain/entities/color";
+import Color from "../../../domain/entities/color";
 
 class ColorDao {
     constructor(

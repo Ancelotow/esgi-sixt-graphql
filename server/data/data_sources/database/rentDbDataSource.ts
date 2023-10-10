@@ -1,6 +1,6 @@
 import {Query} from "ts-postgres";
 import dbService from "../../dbService";
-import RentDao from "../../models/rentDao";
+import RentDao from "../../models/dao/rentDao";
 
 class RentDbDataSource {
 

@@ -1,4 +1,4 @@
-import Status from "../../domain/entities/status";
+import Status from "../../../domain/entities/status";
 
 class StatusDao {
     constructor(
