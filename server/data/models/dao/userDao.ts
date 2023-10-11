@@ -6,7 +6,8 @@ class UserDao {
         public lastname: string,
         public firstname: string,
         public email: string,
-        public birthday_date: Date
+        public birthday_date: Date,
+        public is_admin: boolean
     ) {}
 
     toEntity() {
@@ -16,6 +17,7 @@ class UserDao {
         user.firstname = this.firstname;
         user.email = this.email;
         user.birthdayDate = this.birthday_date;
+        user.isAdmin = this.is_admin;
         return user;
     }
 }
