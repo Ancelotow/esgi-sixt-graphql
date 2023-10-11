@@ -11,6 +11,7 @@ class Vehicle {
     colorId: number
     centerId: number
     transmissionId: number
+    imageUri: string
 }
 
 export default Vehicle

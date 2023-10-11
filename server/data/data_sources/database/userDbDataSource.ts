@@ -16,7 +16,7 @@ class UserDbDataSource {
 
     async getFromCredentials(email: string, password: string): Promise<UserDao | null> {
         const query = new Query(
-            'SELECT id, lastname, firstname, birthday_date, email  FROM "user" WHERE email = $1 AND password = $2',
+            'SELECT id, lastname, firstname, birthday_date, email  FROM "user" WHERE email = $1 AND password = sha512($2)',
             [email, password]
         )
         const result = await dbService.dbClient.execute(query);
@@ -30,7 +30,7 @@ class UserDbDataSource {
 
     async addUser(user: AddUserDto): Promise<UserDao> {
         const query = new Query(
-            'INSERT INTO "user" (lastname, firstname, email, password, birthday_date) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+            'INSERT INTO "user" (lastname, firstname, email, password, birthday_date) VALUES ($1, $2, $3, sha512($4), $5) RETURNING id',
             [user.lastname, user.firstname, user.email, user.password, user.birthday_date]
         )
         const result = await dbService.dbClient.execute(query);
