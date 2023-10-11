@@ -29,6 +29,7 @@ const vehicleType = new GraphQLObjectType<Vehicle>({
         amountExcluding: { type: GraphQLFloat },
         maxCharge: { type: GraphQLFloat },
         maxSpeedAllowed: { type: GraphQLFloat },
+        imageUri: { type: GraphQLString },
         transmission: {
             type: GraphQLNonNull(transmissionSystemType),
             resolve: (vehicle) => vehicle.transmissionId

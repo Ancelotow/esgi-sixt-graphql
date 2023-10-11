@@ -13,7 +13,8 @@ class VehicleDao {
         public model_id: number,
         public color_id: number,
         public center_id: number,
-        public transmission_id: number
+        public transmission_id: number,
+        public image_uri: string,
     ) {}
 
     toEntity() {
@@ -30,6 +31,7 @@ class VehicleDao {
         vehicle.colorId = this.color_id
         vehicle.centerId = this.center_id
         vehicle.transmissionId = this.transmission_id
+        vehicle.imageUri = this.image_uri
         return vehicle
     }
 }
