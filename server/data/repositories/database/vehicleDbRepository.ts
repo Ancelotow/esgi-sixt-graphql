@@ -18,7 +18,7 @@ class VehicleDbRepository implements VehicleRepository {
 
     async updateVehicle(id: number, kilometrage: number): Promise<Vehicle> {
         let results = await this._dataSource.updateVehicle(id, kilometrage);
-        return results.toEntity();
+        return results?.toEntity();
     }
 
 }

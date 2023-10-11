@@ -26,7 +26,7 @@ const updateVehicleType = mutationWithClientMutationId({
             );
         } 
         let vehicleUpdated = await VehicleController.updateVehicle(input.vehicleId, input.kilometrage);
-        return {user: vehicleUpdated};
+        return {vehicle: vehicleUpdated};
     },
 })
 

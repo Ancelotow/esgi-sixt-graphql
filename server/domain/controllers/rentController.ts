@@ -15,6 +15,10 @@ class RentController {
         return results.find((rent) => rent.id === id);
     }
 
+    async updateRentStatus(rentId: number, statusId: number): Promise<Rent> {
+        return await this._repository.updateRentStatus(rentId,statusId);
+    }
+
 }
 
 export default new RentController();
