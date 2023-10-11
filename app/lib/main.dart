@@ -1,6 +1,6 @@
 import 'package:app/data_sources/api_users_data_source.dart';
 import 'package:app/models/users.dart';
-import 'package:app/screen/home/rent_screen.dart';
+import 'package:app/screen/home/vehicle_screen_copy.dart';
 import 'package:app/signIn_signUp/connexion_screen.dart';
 import 'package:app/signIn_signUp/home_screen.dart';
 import 'package:app/signIn_signUp/register_screen.dart';
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
               '/': (context) => const HomeScreen(),
               ConnexionScreen.routeName: (context) => ConnexionScreen(),
               RegisterScreen.routeName: (context) => RegisterScreen(),
-              RentScreen.routeName: (context) => const RentScreen(),
+              VehicleScreen.routeName: (context) => const VehicleScreen(),
             },
             onGenerateRoute: (settings) {
               Widget content = const SizedBox.shrink();

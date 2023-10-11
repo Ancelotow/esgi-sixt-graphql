@@ -1,23 +1,24 @@
+import 'package:app/models/vehicles.dart';
 import 'package:app/screen/home/widgets/brand_list.dart';
 import 'package:app/screen/home/widgets/cars_item.dart';
 import 'package:app/screen/home/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RentScreen extends StatefulWidget {
+class VehicleScreen extends StatefulWidget {
   static const String routeName = '/RentScreen';
 
   static void navigateTo(BuildContext context) {
     Navigator.of(context).pushNamed(routeName);
   }
 
-  const RentScreen({Key? key}) : super(key: key);
+  const VehicleScreen({Key? key}) : super(key: key);
 
   @override
-  _RentScreenState createState() => _RentScreenState();
+  _VehicleScreenState createState() => _VehicleScreenState();
 }
 
-class _RentScreenState extends State<RentScreen> {
+class _VehicleScreenState extends State<VehicleScreen> {
   int _selectedPageIndex = 0;
 
   void setSelectedIndex(int index) {
@@ -63,7 +64,7 @@ class _RentScreenState extends State<RentScreen> {
                       child: ListView.builder(
                         itemCount: 5,
                         itemBuilder: (context, index) {
-                          return CarItem();
+                          return CarItem(vehicle: Vehicle(id: '2'),);
                         },
                       ),
                     )
