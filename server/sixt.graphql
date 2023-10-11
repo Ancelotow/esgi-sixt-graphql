@@ -263,6 +263,11 @@ type Vehicle {
     Si le véhicule est disponible à la location
     """
     isAvailable: Boolean!
+
+    """
+    L'url de l'image du véhicule
+    """
+    imageUri: String
 }
 
 """
@@ -424,6 +429,11 @@ type User {
     La date d'anniversaire de l'utilisateur
     """
     birthdayDate: String
+
+    """
+    Si l'utilisateur est un administrateur
+    """
+    isAdmin: Boolean!
 }
 
 """
