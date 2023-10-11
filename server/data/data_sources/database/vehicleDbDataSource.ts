@@ -37,7 +37,7 @@ class VehicleDbDataSource {
 
     async updateVehicle(vehicleId: number, kilometrage: number): Promise<VehicleDao> {
         const query = new Query(
-            'UPDATE vehicle SET kilometrage = $1 WHERE id = $2 RETURNING id, number_plate, nb_places, kilometrage, is_air_conditioner, amount_excluding, max_charge, max_speed_allowed, model_id, color_id, center_id, transmission_id',
+            'UPDATE "vehicle" SET kilometrage = $1 WHERE id = $2 RETURNING id, number_plate, nb_places, kilometrage, is_air_conditioner, amount_excluding, max_charge, max_speed_allowed, model_id, color_id, center_id, transmission_id',
             [kilometrage,vehicleId]
         );
         const result = await dbService.dbClient.execute(query);

@@ -1,6 +1,7 @@
 import RentRepository from "../repositories/rentRepository";
 import Rent from "../entities/rent";
 import RentDbRepository from "../../data/repositories/database/rentDbRepository";
+import CreateRentDto from "../../data/models/dto/createRentDto";
 
 class RentController {
 
@@ -17,6 +18,10 @@ class RentController {
 
     async updateRentStatus(rentId: number, statusId: number): Promise<Rent> {
         return await this._repository.updateRentStatus(rentId,statusId);
+    }
+
+    async createRent(rent: CreateRentDto): Promise<Rent> {
+        return await this._repository.createRent(rent);
     }
 
 }
