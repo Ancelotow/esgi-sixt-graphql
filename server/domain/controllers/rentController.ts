@@ -11,6 +11,10 @@ class RentController {
         return this._repository.getAll();
     }
 
+    getByUserId(userId: number): Promise<Rent[]> {
+        return this._repository.getByUserId(userId);
+    }
+
     async getById(id: number): Promise<Rent> {
         let results = await this._repository.getAll();
         return results.find((rent) => rent.id === id);

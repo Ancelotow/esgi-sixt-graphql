@@ -3,6 +3,7 @@ import {mutationWithClientMutationId} from "graphql-relay";
 import {sessionType} from "../types/sessionType";
 import UserController from "../../../domain/controllers/userController";
 import TokenController from "../../../domain/controllers/tokenController";
+import unauthorizedError from "../errors/unauthorizedError";
 
 
 const loginType = mutationWithClientMutationId({
@@ -17,14 +18,7 @@ const loginType = mutationWithClientMutationId({
     mutateAndGetPayload: async (input) => {
         let user = await UserController.getFromCredential(input.email, input.password);
         if (!user) {
-            throw new GraphQLError('Invalid credentials',
-                null,
-                null,
-                null,
-                null,
-                null,
-                { code: 'UNAUTHORIZED', date: Date.now(), status: 401}
-            );
+            throw unauthorizedError("Wrong email or password");
         }
 
         return {

@@ -1,8 +1,9 @@
 import {mutationWithClientMutationId} from "graphql-relay";
-import {GraphQLBoolean, GraphQLError, GraphQLInt, GraphQLNonNull, GraphQLString} from "graphql";
+import {GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLString} from "graphql";
 import VehicleController from "../../../domain/controllers/vehicleController";
 import AddVehicleDto from "../../../data/models/dto/addVehicleDto";
 import vehicleInterface from "../interfaces/Vehicle";
+import checkIsAdmin from "../checks/checkIsAdmin";
 
 
 const addVehicleType = mutationWithClientMutationId({
@@ -24,7 +25,9 @@ const addVehicleType = mutationWithClientMutationId({
     outputFields: {
         vehicle: {type: vehicleInterface},
     },
-    mutateAndGetPayload: async (input) => {
+    mutateAndGetPayload: async (input, context) => {
+        checkIsAdmin(context); // Throw error if user is not admin
+
         let vehicleDto = new AddVehicleDto();
         vehicleDto.number_plate = input.numberPlate;
         vehicleDto.nb_places = input.nbPlaces;
