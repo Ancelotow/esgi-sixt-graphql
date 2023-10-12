@@ -5,7 +5,8 @@ class CenterDao {
         public id: number,
         public name: string,
         public address: string,
-        public insee_code: string
+        public insee_code: string,
+        public is_delete: boolean,
     ) { }
 
     toEntity() {
@@ -14,6 +15,7 @@ class CenterDao {
         center.name = this.name
         center.address = this.address
         center.inseeCode = this.insee_code
+        center.isDelete = this.is_delete
         return center
     }
 }
