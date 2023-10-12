@@ -1,7 +1,7 @@
-import 'package:app/models/vehicles.dart';
-import 'package:app/screen/detail_cars/detail_cars.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../domain/models/vehicles.dart';
+import '../../detail_cars/detail_cars.dart';
 
 class CarItem extends StatelessWidget {
   final Vehicle vehicle;

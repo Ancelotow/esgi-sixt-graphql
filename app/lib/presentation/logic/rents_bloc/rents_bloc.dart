@@ -1,7 +1,7 @@
-import 'package:app/models/rents.dart';
-import 'package:app/repository/rents_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import '../../../domain/models/rents.dart';
+import '../../../domain/repository/rents_repository.dart';
 
 part 'rents_event.dart';
 part 'rents_state.dart';

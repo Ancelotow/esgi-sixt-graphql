@@ -1,5 +1,6 @@
 import 'package:app/data_sources/rents_data_source.dart';
-import 'package:app/models/rents.dart';
+
+import '../models/rents.dart';
 
 class RentsRepository {
   final RentsDataSource rentDataSource;

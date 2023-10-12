@@ -1,8 +1,9 @@
-import 'package:app/screen/home/vehicle_screen.dart';
-import 'package:app/models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../users_bloc/users_bloc.dart';
+
+import '../../domain/models/users.dart';
+import '../logic/users_bloc/users_bloc.dart';
+import '../screen/home/vehicle_screen.dart';
 
 class ConnexionScreen extends StatelessWidget {
   static const String routeName = '/ConnexionScreen';

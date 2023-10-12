@@ -1,15 +1,14 @@
-import 'package:app/data_sources/vehicles_data_source.dart';
-import 'package:app/models/vehicles.dart';
+import 'package:app/data_sources/users_data_source.dart';
+import 'package:app/domain/models/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:app/models/centers.dart';
 
-class ApiVehiclesDataSource extends VehiclesDataSource {
+class ApiUsersDataSource extends UsersDataSource {
   late final HttpLink httpLink;
   late final ValueNotifier<GraphQLClient> client;
 
-  ApiVehiclesDataSource() {
+  ApiUsersDataSource() {
     httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
     client = ValueNotifier<GraphQLClient>(
       GraphQLClient(
@@ -20,65 +19,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
   }
 
   @override
-  Stream<List<Vehicle>> getAllVehicles() {
-    const String get30Vehicles = r'''
-    query {
-      vehicles (first: 30) {
-        edges {
-          node {
-            id
-            amountExcluding
-            model {
-              name
-            }
-            center {    
-              id      
-              town {
-                name
-              }
-            }
-            imageUri
-          }
-        }
-      }
-    }
-    ''';
-
-    final QueryOptions options = QueryOptions(
-      document: gql(get30Vehicles),
-    );
-
-    return Stream.fromFuture(client.value.query(options)).asyncExpand((result) {
-      if (result.hasException) {
-        return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
-      } else {
-        final List<dynamic> edges = result.data!['vehicles']['edges'];
-        List<Vehicle> listVehicles = [];
-
-        for (var edge in edges) {
-          Vehicle vehicle = Vehicle(
-            id: edge['node']['id'],
-            amount_excluding: edge['node']['amountExcluding'],
-            model: edge['node']['model']['name'],
-            center: CenterVehicle(
-              id: edge['node']['center']['id'],
-              town: edge['node']['center']['town']['name'],
-            ),
-            imageUri: edge['node']['imageUri'] ?? "",
-          );
-
-          listVehicles.add(vehicle);
-        }
-        return Stream.value(listVehicles);
-      }
-    });
-  }
-
-  @override
-  Future<String> addVehicle(Vehicle vehicle) async {
-    // TODO: implement addUser
-    throw UnimplementedError();
-    /*
+  Future<String> addUser(User user) async{
     const String registerUser = r'''
     mutation AddUser($lastname: String!, $firstname: String!, $birthdayDate: String, $email: String!, $password: String!){
       addUser(input: {email: $email, password: $password, lastname: $lastname, firstname: $firstname, birthday_date: $birthdayDate}) {
@@ -103,17 +44,15 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
     final QueryResult result = await client.value.query(options);
 
     if (result.hasException) {
-      print(result.exception.toString());
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
       final String idUser = result.data!['addUser']['user']['id'];
       return idUser;
     }
-     */
   }
 
   @override
-  Future<void> editVehicle(Vehicle vehicle) async {
+  Future<void> editUser(User user) async {
     // TODO: implement addUser
     throw UnimplementedError();
     /*
@@ -154,7 +93,40 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
   }
 
   @override
-  Future<Vehicle> detailVehicle(String id) async {
+  Future<void> loginUser(User user) async {
+    const String loginUser = r'''
+    mutation Login($email: String!, $password: String!){
+      login(input: {email: $email, password: $password}) {
+        session {
+          token
+          user {
+            firstname
+          }
+        }
+      }
+    }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(loginUser),
+      variables: {
+        'email': user.email,
+        'password': user.password,
+      },
+    );
+
+    final QueryResult result = await client.value.query(options);
+
+    if (result.hasException) {
+      throw Exception('Erreur GraphQL: ${result.exception.toString()}');
+    } else {
+      final String accessToken = result.data!['login']['session']['token'];
+      // Enregistrer l'accessToken par exemple.
+    }
+  }
+
+  @override
+  Future<User> profilUser(String pseudo) async {
     // TODO: implement addUser
     throw UnimplementedError();
     /*

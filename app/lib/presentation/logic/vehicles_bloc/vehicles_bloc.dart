@@ -1,8 +1,8 @@
-import 'package:app/models/vehicles.dart';
-import 'package:app/repository/vehicles_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import '../../../domain/models/vehicles.dart';
+import '../../../domain/repository/vehicles_repository.dart';
 
 part 'vehicles_event.dart';
 part 'vehicles_state.dart';

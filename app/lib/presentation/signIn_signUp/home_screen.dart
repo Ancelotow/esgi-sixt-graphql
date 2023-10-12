@@ -1,6 +1,7 @@
-import 'package:app/signIn_signUp/connexion_screen.dart';
-import 'package:app/signIn_signUp/register_screen.dart';
+import 'package:app/presentation/signIn_signUp/register_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'connexion_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/';

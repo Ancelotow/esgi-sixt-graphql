@@ -1,19 +1,19 @@
-import 'package:app/data_sources/api_users_data_source.dart';
-import 'package:app/data_sources/api_vehicles_data_source.dart';
-import 'package:app/models/users.dart';
-import 'package:app/repository/vehicles_repository.dart';
-import 'package:app/screen/home/vehicle_screen.dart';
-import 'package:app/signIn_signUp/connexion_screen.dart';
-import 'package:app/signIn_signUp/home_screen.dart';
-import 'package:app/signIn_signUp/register_screen.dart';
-import 'package:app/users_bloc/users_bloc.dart';
-import 'package:app/repository/users_repository.dart';
-import 'package:app/vehicles_bloc/vehicles_bloc.dart';
+import 'package:app/presentation/logic/users_bloc/users_bloc.dart';
+import 'package:app/presentation/logic/vehicles_bloc/vehicles_bloc.dart';
+import 'package:app/presentation/screen/home/vehicle_screen.dart';
+import 'package:app/presentation/signIn_signUp/connexion_screen.dart';
+import 'package:app/presentation/signIn_signUp/home_screen.dart';
+import 'package:app/presentation/signIn_signUp/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
+import 'data_sources/api/api_users_data_source.dart';
+import 'data_sources/api/api_vehicles_data_source.dart';
+import 'domain/models/users.dart';
+import 'domain/repository/users_repository.dart';
+import 'domain/repository/vehicles_repository.dart';
 
 void main() async {
   await dotenv.load(fileName: "assets/.env");

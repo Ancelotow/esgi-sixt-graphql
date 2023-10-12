@@ -1,5 +1,5 @@
 import 'package:app/data_sources/rents_data_source.dart';
-import 'package:app/models/rents.dart';
+import 'package:app/domain/models/rents.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';

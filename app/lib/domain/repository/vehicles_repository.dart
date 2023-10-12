@@ -1,5 +1,5 @@
 import 'package:app/data_sources/vehicles_data_source.dart';
-import 'package:app/models/vehicles.dart';
+import 'package:app/domain/models/vehicles.dart';
 
 class VehiclesRepository {
   final VehiclesDataSource vehiclesDataSource;

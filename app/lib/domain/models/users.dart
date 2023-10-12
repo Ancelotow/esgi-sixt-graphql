@@ -1,4 +1,6 @@
-import 'package:app/models/rents.dart';
+
+
+import 'package:app/domain/models/rents.dart';
 
 class User {
   final String id;

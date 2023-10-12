@@ -1,4 +1,4 @@
-import 'package:app/models/rents.dart';
+import '../domain/models/rents.dart';
 
 abstract class RentsDataSource {
 

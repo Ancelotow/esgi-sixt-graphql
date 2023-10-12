@@ -1,4 +1,4 @@
-import 'package:app/models/vehicles.dart';
+import 'package:app/domain/models/vehicles.dart';
 
 abstract class VehiclesDataSource {
   Stream<List<Vehicle>> getAllVehicles();

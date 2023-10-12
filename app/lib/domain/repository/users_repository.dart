@@ -1,4 +1,4 @@
-import 'package:app/models/users.dart';
+import 'package:app/domain/models/users.dart';
 import 'package:app/data_sources/users_data_source.dart';
 
 class UsersRepository {

@@ -1,4 +1,4 @@
-import 'package:app/models/centers.dart';
+import 'centers.dart';
 
 class Vehicle {
   final String id;

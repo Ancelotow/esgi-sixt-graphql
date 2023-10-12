@@ -1,7 +1,7 @@
-import 'package:app/models/users.dart';
-import 'package:app/repository/users_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import '../../../domain/models/users.dart';
+import '../../../domain/repository/users_repository.dart';
 
 part 'users_event.dart';
 
