@@ -1,23 +1,13 @@
 import 'package:app/data_sources/vehicles_data_source.dart';
 import 'package:app/domain/models/vehicles.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/domain/models/centers.dart';
 
 class ApiVehiclesDataSource extends VehiclesDataSource {
-  late final HttpLink httpLink;
-  late final ValueNotifier<GraphQLClient> client;
+  final ValueNotifier<GraphQLClient> client;
 
-  ApiVehiclesDataSource() {
-    httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
-    client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(
-        link: httpLink,
-        cache: GraphQLCache(),
-      ),
-    );
-  }
+  ApiVehiclesDataSource(this.client);
 
   @override
   Stream<List<Vehicle>> getAllVehicles() {

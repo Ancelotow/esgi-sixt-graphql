@@ -41,6 +41,8 @@ dependencies:
   graphql_flutter: ^5.1.2
   hive: ^2.2.3
   flutter_dotenv: ^5.1.0
+  dio: ^5.3.3
+  gql_dio_link: ^1.0.1
 
 dev_dependencies:
   flutter_test:

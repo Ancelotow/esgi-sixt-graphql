@@ -1,22 +1,12 @@
 import 'package:app/data_sources/rents_data_source.dart';
 import 'package:app/domain/models/rents.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ApiRentsDataSource extends RentsDataSource {
-  late final HttpLink httpLink;
-  late final ValueNotifier<GraphQLClient> client;
+  final ValueNotifier<GraphQLClient> client;
 
-  ApiRentsDataSource() {
-    httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
-    client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(
-        link: httpLink,
-        cache: GraphQLCache(),
-      ),
-    );
-  }
+  ApiRentsDataSource(this.client);
 
   @override
   Future<String> addRent(Rent rent) {
