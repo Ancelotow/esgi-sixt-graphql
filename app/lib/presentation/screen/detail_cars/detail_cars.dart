@@ -175,7 +175,7 @@ class _DetailCarsState extends State<DetailCars> {
                             color: Colors.black54,
                           ),
                           Text(
-                            widget.vehicle.center?.town ?? "",
+                            widget.vehicle.center?.town?.inseeCode ?? "",
                             style: GoogleFonts.montserrat(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,

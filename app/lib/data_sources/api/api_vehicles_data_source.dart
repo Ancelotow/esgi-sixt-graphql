@@ -1,4 +1,5 @@
 import 'package:app/data_sources/vehicles_data_source.dart';
+import 'package:app/domain/models/town.dart';
 import 'package:app/domain/models/vehicles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -26,8 +27,12 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
               }
             }
             center {    
-              id      
+              id
+              name
+              address
               town {
+                inseeCode
+                zipCode
                 name
               }
             }
@@ -57,10 +62,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
             amount_excluding: edge['node']['amountExcluding'],
             model: edge['node']['model']['name'],
             brandUri: edge['node']['model']['brand']['logoUri'],
-            center: CenterVehicle(
-              id: edge['node']['center']['id'],
-              town: edge['node']['center']['town']['name'],
-            ),
+            center: CenterVehicle.fromJson(edge['node']['center']),
             imageUri: edge['node']['imageUri'] ?? "",
             kilometrage: edge['node']['kilometrage'],
           );
