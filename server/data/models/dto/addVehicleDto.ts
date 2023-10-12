@@ -11,6 +11,10 @@ class AddVehicleDto {
     center_id: number
     transmission_id: number
     image_uri: string
+    capacity: number // For Van
+    height: number // For Van
+    length: number // For Limousine
+    power: number // For SportCar
 }
 
 export default AddVehicleDto
