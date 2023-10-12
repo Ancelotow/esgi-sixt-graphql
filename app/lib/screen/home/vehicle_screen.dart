@@ -1,5 +1,4 @@
 import 'package:app/data_sources/api_vehicles_data_source.dart';
-import 'package:app/models/vehicles.dart';
 import 'package:app/repository/vehicles_repository.dart';
 import 'package:app/screen/home/widgets/brand_list.dart';
 import 'package:app/screen/home/widgets/cars_item.dart';
@@ -34,13 +33,16 @@ class _VehicleScreenState extends State<VehicleScreen> {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (context) => VehiclesRepository(
-        vehiclesDataSource: ApiVehiclesDataSource(),
-      ),
+      create: (context) =>
+          VehiclesRepository(
+            vehiclesDataSource: ApiVehiclesDataSource(),
+          ),
       child: BlocProvider(
-        create: (context) => VehiclesBloc(
+        create: (context) =>
+        VehiclesBloc(
           repository: RepositoryProvider.of<VehiclesRepository>(context),
-        )..add(GetAllVehicles()),
+        )
+          ..add(GetAllVehicles()),
         child: Scaffold(
           body: Column(
             children: [
@@ -75,7 +77,10 @@ class _VehicleScreenState extends State<VehicleScreen> {
                           builder: (context) {
                             return Container(
                               width: double.infinity,
-                              height: MediaQuery.of(context).size.height,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height,
                               child: Stack(
                                 children: [
                                   BlocBuilder<VehiclesBloc, VehiclesState>(
@@ -103,11 +108,9 @@ class _VehicleScreenState extends State<VehicleScreen> {
                                             itemCount: state.vehicles.length,
                                             itemBuilder: (context, index) {
                                               final vehicle =
-                                                  state.vehicles[index];
+                                              state.vehicles[index];
                                               return CarItem(
                                                 vehicle: vehicle,
-                                                onTap: () => _onVehicleTap(
-                                                    context, vehicle),
                                               );
                                             },
                                           );
@@ -130,8 +133,4 @@ class _VehicleScreenState extends State<VehicleScreen> {
       ),
     );
   }
-}
-
-void _onVehicleTap(BuildContext context, Vehicle vehicle) {
-  //TODO
 }

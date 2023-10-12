@@ -20,7 +20,6 @@ class CarItem extends StatelessWidget {
       height: 200,
       child: Stack(
         children: [
-
           Positioned(
             top: 50,
             left: 0,
@@ -32,9 +31,11 @@ class CarItem extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: const [
-                    BoxShadow(color: Colors.black12, spreadRadius: 0.5, blurRadius: 15)
-                  ]
-              ),
+                    BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 0.5,
+                        blurRadius: 15)
+                  ]),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -85,7 +86,10 @@ class CarItem extends StatelessWidget {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailCars()));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => DetailCars(
+                                      vehicle: vehicle,
+                                    )));
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
