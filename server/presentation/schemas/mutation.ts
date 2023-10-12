@@ -7,6 +7,7 @@ import { createRentType } from "./mutators/createRent";
 import { addVehicleType } from "./mutators/addVehicle";
 import { addCenterType } from "./mutators/addCenter";
 import { deleteCenterType } from "./mutators/deleteCenter";
+import { updateCenterType } from "./mutators/updateCenter";
 
 export default new GraphQLObjectType({
     name: 'Mutation',
@@ -19,5 +20,6 @@ export default new GraphQLObjectType({
         createRent: createRentType,
         addCenter: addCenterType,
         deleteCenter: deleteCenterType,
+        updateCenter: updateCenterType,
     }
 })

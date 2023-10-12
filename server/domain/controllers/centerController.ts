@@ -2,6 +2,7 @@ import CenterRepository from "../repositories/centerRepository";
 import Center from "../entities/center";
 import CenterDbRepository from "../../data/repositories/database/centerDbRepository";
 import AddCenterDto from "../../data/models/dto/addCenterDto";
+import UpdateCenterDto from "../../data/models/dto/updateCenterDto";
 
 class CenterController {
 
@@ -22,6 +23,10 @@ class CenterController {
 
     async delete(centerId: number): Promise<Center> {
         return this._repository.delete(centerId);
+    }
+
+    async update(centerId: number, data: UpdateCenterDto): Promise<Center> {
+        return this._repository.update(centerId, data);
     }
 
 }

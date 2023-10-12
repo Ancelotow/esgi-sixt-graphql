@@ -15,7 +15,7 @@ const deleteCenterType = mutationWithClientMutationId({
     },
     mutateAndGetPayload: async (input, context) => {
         checkIsAdmin(context); // Throw error if user is not admin
-        let centerDeleted = await centerController.delete(input.centerId)
+        let centerDeleted = await centerController.delete(input.centerId);
         return {center: centerDeleted};
     },
 })
