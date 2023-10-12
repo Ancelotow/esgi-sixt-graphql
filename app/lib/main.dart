@@ -1,11 +1,15 @@
 import 'package:app/data_sources/api/api_brand_data_source.dart';
+import 'package:app/data_sources/api/api_center_data_source.dart';
 import 'package:app/data_sources/api/api_rents_data_source.dart';
+import 'package:app/domain/repository/center_repository.dart';
 import 'package:app/domain/repository/rents_repository.dart';
 import 'package:app/presentation/logic/brands_bloc/brands_bloc.dart';
+import 'package:app/presentation/logic/centers_bloc/centers_bloc.dart';
 import 'package:app/presentation/logic/rents_bloc/rents_bloc.dart';
 import 'package:app/presentation/logic/users_bloc/users_bloc.dart';
 import 'package:app/presentation/logic/vehicles_bloc/vehicles_bloc.dart';
 import 'package:app/presentation/screen/home/vehicle_screen.dart';
+import 'package:app/presentation/screen/navigation/navigation_screen.dart';
 import 'package:app/presentation/signIn_signUp/connexion_screen.dart';
 import 'package:app/presentation/signIn_signUp/home_screen.dart';
 import 'package:app/presentation/signIn_signUp/register_screen.dart';
@@ -62,6 +66,11 @@ class MyApp extends StatelessWidget {
             brandDataSource: ApiBrandDataSource(client),
           ),
         ),
+        RepositoryProvider<CenterRepository>(
+          create: (context) => CenterRepository(
+            centerDataSource: ApiCenterDataSource(client),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -85,6 +94,11 @@ class MyApp extends StatelessWidget {
               repository: RepositoryProvider.of<BrandRepository>(context),
             ),
           ),
+          BlocProvider<CentersBloc>(
+            create: (context) => CentersBloc(
+              repository: RepositoryProvider.of<CenterRepository>(context),
+            ),
+          ),
         ],
         child: GraphQLProvider(
           client: client,
@@ -106,6 +120,7 @@ class MyApp extends StatelessWidget {
               '/': (context) => const HomeScreen(),
               ConnexionScreen.routeName: (context) => ConnexionScreen(),
               RegisterScreen.routeName: (context) => RegisterScreen(),
+              NavigatorScreen.routeName: (context) => const NavigatorScreen(),
               VehicleScreen.routeName: (context) => const VehicleScreen(),
             },
             onGenerateRoute: (settings) {

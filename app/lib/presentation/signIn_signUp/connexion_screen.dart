@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/models/users.dart';
 import '../logic/users_bloc/users_bloc.dart';
 import '../screen/home/vehicle_screen.dart';
+import '../screen/navigation/navigation_screen.dart';
 
 class ConnexionScreen extends StatelessWidget {
   static const String routeName = '/ConnexionScreen';
@@ -108,6 +109,6 @@ class ConnexionScreen extends StatelessWidget {
   }
 
   void _navigateToRentScreen(BuildContext context) async {
-    VehicleScreen.navigateTo(context);
+    NavigatorScreen.navigateTo(context);
   }
 }
