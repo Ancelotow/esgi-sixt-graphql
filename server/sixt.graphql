@@ -263,6 +263,11 @@ type Vehicle {
     Si le véhicule est disponible à la location
     """
     isAvailable: Boolean!
+
+    """
+    L'url de l'image du véhicule
+    """
+    imageUri: String
 }
 
 """
@@ -396,5 +401,100 @@ type Query {
     rents: RentConnection!
 }
 
+"""
+Utilisateur
+"""
+type User {
+    """
+    L'id de l'utilisateur
+    """
+    id: ID!
+
+    """
+    Le prénom de l'utilisateur
+    """
+    firstname: String!
+
+    """
+    Le nom de l'utilisateur
+    """
+    lastname: String!
+
+    """
+    L'email de l'utilisateur
+    """
+    email: String!
+
+    """
+    La date d'anniversaire de l'utilisateur
+    """
+    birthdayDate: String
+
+    """
+    Si l'utilisateur est un administrateur
+    """
+    isAdmin: Boolean!
+}
+
+"""
+Informations de connexion
+"""
+input Login {
+    """
+    Email de connexion
+    """
+    email: String!
+
+    """
+    Mot de passe de connexion
+    """
+    password: String!
+}
+
+"""
+Informations d'un utilisateur pour la création
+"""
+input AddUser {
+    """
+    Le prénom de l'utilisateur
+    """
+    firstname: String!
+
+    """
+    Le nom de l'utilisateur
+    """
+    lastname: String!
+
+    """
+    L'email de l'utilisateur
+    """
+    email: String!
+
+    """
+    La date d'anniversaire de l'utilisateur
+    """
+    birthdayDate: String
+
+    """
+    Le mot de passe de l'utilisateur
+    """
+    password: String!
+}
+
+"""
+Mutations
+"""
+type Mutation {
+    """
+    Connexion à l'application
+    """
+    login(login: Login!): User
+
+    """
+    Création d'un utilisateur
+    """
+    addUser(user: AddUser!): User
+
+}
 
 

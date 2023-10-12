@@ -19,6 +19,7 @@ const addVehicleType = mutationWithClientMutationId({
         colorId: { type: GraphQLNonNull(GraphQLInt) },
         centerId: { type: GraphQLNonNull(GraphQLInt) },
         transmissionId: { type: GraphQLNonNull(GraphQLInt) },
+        imageUri: { type: GraphQLNonNull(GraphQLString) },
     },
     outputFields: {
         vehicle: {type: vehicleType},
@@ -36,6 +37,7 @@ const addVehicleType = mutationWithClientMutationId({
         vehicleDto.color_id = input.colorId;
         vehicleDto.center_id = input.centerId;
         vehicleDto.transmission_id = input.transmissionId;
+        vehicleDto.image_uri = input.imageUri;
         let vehicleAdded = await VehicleController.addVehicle(vehicleDto);
         return {vehicle: vehicleAdded};
     },

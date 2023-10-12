@@ -10,6 +10,7 @@ class AddVehicleDto {
     color_id: number
     center_id: number
     transmission_id: number
+    image_uri: string
 }
 
 export default AddVehicleDto
