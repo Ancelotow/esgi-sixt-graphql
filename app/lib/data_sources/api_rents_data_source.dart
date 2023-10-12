@@ -1,6 +1,7 @@
 import 'package:app/data_sources/rents_data_source.dart';
 import 'package:app/models/rents.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ApiRentsDataSource extends RentsDataSource {
@@ -8,7 +9,7 @@ class ApiRentsDataSource extends RentsDataSource {
   late final ValueNotifier<GraphQLClient> client;
 
   ApiRentsDataSource() {
-    httpLink = HttpLink("http://localhost:4000/graphql");
+    httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
     client = ValueNotifier<GraphQLClient>(
       GraphQLClient(
         link: httpLink,

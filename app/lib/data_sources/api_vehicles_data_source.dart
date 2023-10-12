@@ -1,6 +1,7 @@
 import 'package:app/data_sources/vehicles_data_source.dart';
 import 'package:app/models/vehicles.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/models/centers.dart';
 
@@ -9,7 +10,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
   late final ValueNotifier<GraphQLClient> client;
 
   ApiVehiclesDataSource() {
-    httpLink = HttpLink("http://192.168.1.107:4000/graphql");
+    httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
     client = ValueNotifier<GraphQLClient>(
       GraphQLClient(
         link: httpLink,

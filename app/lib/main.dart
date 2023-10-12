@@ -11,11 +11,12 @@ import 'package:app/repository/users_repository.dart';
 import 'package:app/vehicles_bloc/vehicles_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
 
 void main() async {
-  //Initializes the HiveStore used for caching
+  await dotenv.load(fileName: "assets/.env");
   await initHiveForFlutter();
   await Hive.openBox('SixtGi');
 
@@ -23,13 +24,12 @@ void main() async {
 }
 
 final HttpLink httpLink = HttpLink(
-  'http://localhost:4000/graphql',
+  '${dotenv.env["API_BASE_URI"]}/graphql',
 );
 
 ValueNotifier<GraphQLClient> client = ValueNotifier(
   GraphQLClient(
     link: httpLink,
-    // The default store is the InMemoryStore, which does NOT persist to disk
     cache: GraphQLCache(store: HiveStore()),
   ),
 );

@@ -1,6 +1,7 @@
 import 'package:app/data_sources/users_data_source.dart';
 import 'package:app/models/users.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ApiUsersDataSource extends UsersDataSource {
@@ -8,7 +9,7 @@ class ApiUsersDataSource extends UsersDataSource {
   late final ValueNotifier<GraphQLClient> client;
 
   ApiUsersDataSource() {
-    httpLink = HttpLink("http://192.168.1.107:4000/graphql");
+    httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
     client = ValueNotifier<GraphQLClient>(
       GraphQLClient(
         link: httpLink,
