@@ -30,16 +30,6 @@ class _DetailCarsState extends State<DetailCars> {
               size: 30,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_horiz,
-                color: Colors.white60,
-                size: 30,
-              ),
-            )
-          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +41,7 @@ class _DetailCarsState extends State<DetailCars> {
               height: 20,
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(20, 15, 0, 10),
+              margin: const EdgeInsets.fromLTRB(20, 5, 0, 10),
               child: Text(
                 "Specifications",
                 style: GoogleFonts.montserrat(
@@ -69,7 +59,7 @@ class _DetailCarsState extends State<DetailCars> {
                   children: [
                     Container(
                       margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       decoration: BoxDecoration(
                           color: Colors.black87,
                           borderRadius: BorderRadius.circular(20)),
@@ -111,7 +101,7 @@ class _DetailCarsState extends State<DetailCars> {
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      padding: EdgeInsets.symmetric(horizontal: 30),
                       decoration: BoxDecoration(
                           color: Colors.black87,
                           borderRadius: BorderRadius.circular(20)),
@@ -148,12 +138,50 @@ class _DetailCarsState extends State<DetailCars> {
                         ),
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: Colors.black87,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: Image.asset(
+                                "assets/icons/ic_transmission.png",
+                                height: 30,
+                                width: 30,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: '${widget.vehicle.transmission}'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(20, 15, 20, 10),
+              margin: EdgeInsets.fromLTRB(20, 30, 20, 10),
               child: Column(
                 children: [
                   Row(
@@ -188,7 +216,7 @@ class _DetailCarsState extends State<DetailCars> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
+                  Wrap(
                     children: [
                       const Icon(
                         Icons.home_filled,
@@ -198,7 +226,7 @@ class _DetailCarsState extends State<DetailCars> {
                         width: 5,
                       ),
                       Text(
-                        '${widget.vehicle.center?.name} - ${widget.vehicle.center?.address}',
+                        '${widget.vehicle.center?.address}',
                         style: GoogleFonts.montserrat(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -327,7 +355,7 @@ class TopMenuAndShowcase extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                                 color: Colors.black12,
                                 blurRadius: 7,
@@ -335,7 +363,7 @@ class TopMenuAndShowcase extends StatelessWidget {
                           ],
                         ),
                         child: Image.network(
-                          vehicle.brandUri!,
+                          vehicle.brand!.logoUri,
                           width: 25,
                           height: 25,
                         ),
@@ -346,14 +374,14 @@ class TopMenuAndShowcase extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Tesla Model S",
+                              vehicle.brand!.name,
                               style: GoogleFonts.montserrat(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white),
                             ),
                             Text(
-                              "2021",
+                              vehicle.brand!.releaseYear.toString(),
                               style: GoogleFonts.montserrat(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
@@ -363,22 +391,6 @@ class TopMenuAndShowcase extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.orange,
-                          ),
-                          Text(
-                            "4.8",
-                            style: GoogleFonts.montserrat(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),

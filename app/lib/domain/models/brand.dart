@@ -1,12 +1,14 @@
 class Brand {
-  final int id;
+  final String id;
   final String name;
   final String logoUri;
+  final int? releaseYear;
 
   Brand({
     required this.id,
     required this.name,
     required this.logoUri,
+    this.releaseYear,
   });
 
   factory Brand.fromJson(Map<String, dynamic> json) {

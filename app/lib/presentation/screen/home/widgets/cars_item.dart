@@ -46,7 +46,7 @@ class CarItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          vehicle.model!,
+                          vehicle.brand!.name,
                           style: GoogleFonts.montserrat(
                               fontSize: 20, fontWeight: FontWeight.w500),
                         ),

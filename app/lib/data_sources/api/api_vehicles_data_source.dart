@@ -1,4 +1,5 @@
 import 'package:app/data_sources/vehicles_data_source.dart';
+import 'package:app/domain/models/brand.dart';
 import 'package:app/domain/models/vehicles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,16 +28,21 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
         edges {
           node {
             id
+            transmission
             nbPlaces
             amountExcluding
             model {
+              id
               name
+              releaseYear
               brand {
                 logoUri
               }
             }
             center {    
-              id      
+              id     
+              name
+              address 
               town {
                 name
               }
@@ -63,12 +69,19 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
         for (var edge in edges) {
           Vehicle vehicle = Vehicle(
             id: edge['node']['id'],
+            transmission: edge['node']['transmission'],
             nb_places: edge['node']['nbPlaces'],
             amount_excluding: edge['node']['amountExcluding'],
-            model: edge['node']['model']['name'],
-            brandUri: edge['node']['model']['brand']['logoUri'],
+            brand: Brand(
+              id: edge['node']['model']['id'],
+              name: edge['node']['model']['name'],
+              logoUri: edge['node']['model']['brand']['logoUri'],
+              releaseYear: edge['node']['model']['releaseYear'],
+            ),
             center: CenterVehicle(
               id: edge['node']['center']['id'],
+              name: edge['node']['center']['name'],
+              address: edge['node']['center']['address'],
               town: edge['node']['center']['town']['name'],
             ),
             imageUri: edge['node']['imageUri'] ?? "",
