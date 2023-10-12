@@ -7,7 +7,7 @@ const userType = new GraphQLObjectType<Brand>({
         id: { type: GraphQLNonNull(GraphQLID) },
         lastname: { type: GraphQLNonNull(GraphQLString) },
         firstname: { type: GraphQLNonNull(GraphQLString) },
-        birthday_date: { type: GraphQLString },
+        birthdayDate: { type: GraphQLString },
         email: { type: GraphQLNonNull(GraphQLString) },
         isAdmin: { type: GraphQLNonNull(GraphQLBoolean) },
     },
