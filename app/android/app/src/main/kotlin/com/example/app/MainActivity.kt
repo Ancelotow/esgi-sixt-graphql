@@ -1,4 +1,4 @@
-package com.eoe.esgi_sixt_app
+package com.example.app
 
 import io.flutter.embedding.android.FlutterActivity
 
