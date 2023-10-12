@@ -12,6 +12,11 @@ class RentDbRepository implements RentRepository{
         return results.map(e => e.toEntity());
     }
 
+    async getByUserId(userId: number): Promise<Rent[]> {
+        let results = await this._dataSource.getByUserId(userId);
+        return results.map(e => e.toEntity());
+    }
+
     async updateRentStatus(rentId: number, statusId: number): Promise<Rent> {
         let results = await this._dataSource.updateRentStatus(rentId, statusId);
         return results?.toEntity();

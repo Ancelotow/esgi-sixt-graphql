@@ -1,5 +1,13 @@
 import BrandController from "../../domain/controllers/brandController";
-import {GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLInputType, GraphQLInputObjectType} from "graphql";
+import {
+    GraphQLInt,
+    GraphQLList,
+    GraphQLNonNull,
+    GraphQLObjectType,
+    GraphQLInputType,
+    GraphQLInputObjectType,
+    GraphQLError
+} from "graphql";
 import {brandType} from "./types/brandType";
 import {typeVehicleType} from "./types/typeVehicleType";
 import VehicleTypeController from "../../domain/controllers/vehicleTypeController";
@@ -79,9 +87,20 @@ export default new GraphQLObjectType({
         rents: {
             type: new GraphQLNonNull(rentConnection),
             args: forwardConnectionArgs,
-            resolve: async (_, args) => {
+            resolve: async (_, args, context) => {
                 const offset = getOffsetWithDefault(args.after, 0);
-                let rents = await  RentController.getAll()
+                const user = (context.data) ? context.data.user : null;
+                if(!user) {
+                    throw new GraphQLError('Your are not authenticated',
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        { code: 'NOT_AUTHENTICATED', date: Date.now(), status: 403}
+                    );
+                }
+                let rents = await  RentController.getByUserId(user.id)
                 return connectionFromArraySlice(rents, args, {
                     sliceStart: offset,
                     arrayLength: rents.length,

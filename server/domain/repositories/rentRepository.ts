@@ -5,6 +5,7 @@ interface RentRepository {
     getAll(): Promise<Rent[]>;
     updateRentStatus(rentId: number, statusId: number): Promise<Rent>;
     createRent(rent: CreateRentDto): Promise<Rent>;
+    getByUserId(userId: number): Promise<Rent[]>;
 }
 
 export default RentRepository;
