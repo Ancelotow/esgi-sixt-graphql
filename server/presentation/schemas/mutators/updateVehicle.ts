@@ -1,7 +1,7 @@
 import {mutationWithClientMutationId} from "graphql-relay";
 import {GraphQLError, GraphQLInt, GraphQLNonNull, GraphQLString} from "graphql";
 import VehicleController from "../../../domain/controllers/vehicleController";
-import {vehicleType} from "../types/vehicleType";
+import vehicleInterface from "../interfaces/Vehicle";
 
 
 const updateVehicleType = mutationWithClientMutationId({
@@ -11,7 +11,7 @@ const updateVehicleType = mutationWithClientMutationId({
         kilometrage: { type: GraphQLNonNull(GraphQLInt) }
     },
     outputFields: {
-        vehicle: {type: vehicleType},
+        vehicle: {type: vehicleInterface},
     },
     mutateAndGetPayload: async (input) => {
         let isVehicleExist = await VehicleController.getById(input.vehicleId);

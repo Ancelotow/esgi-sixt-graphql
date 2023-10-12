@@ -1,8 +1,8 @@
 import {connectionDefinitions} from "graphql-relay";
-import {vehicleType} from "../types/vehicleType";
+import vehicleInterface from "../interfaces/Vehicle";
 
 const { connectionType: vehicleConnection } = connectionDefinitions({
-    nodeType: vehicleType,
+    nodeType: vehicleInterface,
 });
 
 export {vehicleConnection}

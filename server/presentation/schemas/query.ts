@@ -2,7 +2,6 @@ import BrandController from "../../domain/controllers/brandController";
 import {GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLInputType, GraphQLInputObjectType} from "graphql";
 import {brandType} from "./types/brandType";
 import {typeVehicleType} from "./types/typeVehicleType";
-import {vehicleType} from "./types/vehicleType";
 import VehicleTypeController from "../../domain/controllers/vehicleTypeController";
 import {modelType} from "./types/modelType";
 import ModelController from "../../domain/controllers/modelController";
@@ -20,6 +19,7 @@ import {connectionFromArraySlice, forwardConnectionArgs, getOffsetWithDefault} f
 import {rentConnection} from "./connection/rentConnection";
 import {vehicleConnection} from "./connection/vehicleConnection";
 import VehicleFilter from './inputs/VehicleFilterInput';
+import vehicleInterface from "./interfaces/Vehicle";
 
 export default new GraphQLObjectType({
     name: 'Query',
@@ -61,7 +61,7 @@ export default new GraphQLObjectType({
             }
         },
         vehiclesFilter: {
-            type: new GraphQLList(vehicleType),
+            type: new GraphQLList(vehicleInterface),
             args: {
                 filter: {
                     type: VehicleFilter,

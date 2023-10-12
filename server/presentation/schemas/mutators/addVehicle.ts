@@ -1,8 +1,8 @@
 import {mutationWithClientMutationId} from "graphql-relay";
 import {GraphQLBoolean, GraphQLError, GraphQLInt, GraphQLNonNull, GraphQLString} from "graphql";
 import VehicleController from "../../../domain/controllers/vehicleController";
-import {vehicleType} from "../types/vehicleType";
 import AddVehicleDto from "../../../data/models/dto/addVehicleDto";
+import vehicleInterface from "../interfaces/Vehicle";
 
 
 const addVehicleType = mutationWithClientMutationId({
@@ -22,7 +22,7 @@ const addVehicleType = mutationWithClientMutationId({
         imageUri: { type: GraphQLNonNull(GraphQLString) },
     },
     outputFields: {
-        vehicle: {type: vehicleType},
+        vehicle: {type: vehicleInterface},
     },
     mutateAndGetPayload: async (input) => {
         let vehicleDto = new AddVehicleDto();

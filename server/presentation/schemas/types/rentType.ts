@@ -7,10 +7,10 @@ import {
     GraphQLObjectType,
     GraphQLString
 } from "graphql";
-import {vehicleType} from "./vehicleType";
 import Rent from "../../../domain/entities/rent";
 import VehicleController from "../../../domain/controllers/vehicleController";
 import {statusType} from "./statusType";
+import vehicleInterface from "../interfaces/Vehicle";
 
 const rentType = new GraphQLObjectType<Rent>({
     name: 'Rent',
@@ -22,7 +22,7 @@ const rentType = new GraphQLObjectType<Rent>({
         rentAt: { type: GraphQLNonNull(GraphQLString) },
         createdAt: { type: GraphQLNonNull(GraphQLString) },
         vehicle: {
-            type: GraphQLNonNull(vehicleType),
+            type: GraphQLNonNull(vehicleInterface),
             resolve: (rent) => VehicleController.getById(rent.vehicleId)
         },
         status: {
