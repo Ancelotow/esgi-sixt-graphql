@@ -1,14 +1,12 @@
-import 'package:app/presentation/screen/home/widgets/brand_list.dart';
-import 'package:app/presentation/screen/home/widgets/cars_item.dart';
-import 'package:app/presentation/screen/home/widgets/search_button.dart';
+import 'package:app/data_sources/api_vehicles_data_source.dart';
+import 'package:app/repository/vehicles_repository.dart';
+import 'package:app/screen/home/widgets/brand_list.dart';
+import 'package:app/screen/home/widgets/cars_item.dart';
+import 'package:app/screen/home/widgets/search_button.dart';
+import 'package:app/vehicles_bloc/vehicles_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../data_sources/api/api_vehicles_data_source.dart';
-import '../../../domain/models/vehicles.dart';
-import '../../../domain/repository/vehicles_repository.dart';
-import '../../logic/vehicles_bloc/vehicles_bloc.dart';
 
 class VehicleScreen extends StatefulWidget {
   static const String routeName = '/VehicleScreen';
@@ -35,13 +33,16 @@ class _VehicleScreenState extends State<VehicleScreen> {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (context) => VehiclesRepository(
-        vehiclesDataSource: ApiVehiclesDataSource(),
-      ),
+      create: (context) =>
+          VehiclesRepository(
+            vehiclesDataSource: ApiVehiclesDataSource(),
+          ),
       child: BlocProvider(
-        create: (context) => VehiclesBloc(
+        create: (context) =>
+        VehiclesBloc(
           repository: RepositoryProvider.of<VehiclesRepository>(context),
-        )..add(GetAllVehicles()),
+        )
+          ..add(GetAllVehicles()),
         child: Scaffold(
           body: Column(
             children: [
@@ -76,7 +77,10 @@ class _VehicleScreenState extends State<VehicleScreen> {
                           builder: (context) {
                             return Container(
                               width: double.infinity,
-                              height: MediaQuery.of(context).size.height,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height,
                               child: Stack(
                                 children: [
                                   BlocBuilder<VehiclesBloc, VehiclesState>(
@@ -104,11 +108,9 @@ class _VehicleScreenState extends State<VehicleScreen> {
                                             itemCount: state.vehicles.length,
                                             itemBuilder: (context, index) {
                                               final vehicle =
-                                                  state.vehicles[index];
+                                              state.vehicles[index];
                                               return CarItem(
                                                 vehicle: vehicle,
-                                                onTap: () => _onVehicleTap(
-                                                    context, vehicle),
                                               );
                                             },
                                           );
@@ -131,8 +133,4 @@ class _VehicleScreenState extends State<VehicleScreen> {
       ),
     );
   }
-}
-
-void _onVehicleTap(BuildContext context, Vehicle vehicle) {
-  //TODO
 }

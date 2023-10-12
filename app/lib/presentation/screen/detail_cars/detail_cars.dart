@@ -1,8 +1,11 @@
+import 'package:app/models/vehicles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DetailCars extends StatefulWidget {
-  const DetailCars({Key? key}) : super(key: key);
+  final Vehicle vehicle;
+
+  const DetailCars({Key? key, required this.vehicle}) : super(key: key);
 
   @override
   _DetailCarsState createState() => _DetailCarsState();
@@ -41,7 +44,9 @@ class _DetailCarsState extends State<DetailCars> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TopMenuAndShowcase(),
+            TopMenuAndShowcase(
+              vehicle: widget.vehicle,
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -64,7 +69,7 @@ class _DetailCarsState extends State<DetailCars> {
                   children: [
                     Container(
                       margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
                       decoration: BoxDecoration(
                           color: Colors.black87,
                           borderRadius: BorderRadius.circular(20)),
@@ -87,10 +92,12 @@ class _DetailCarsState extends State<DetailCars> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                children: const <TextSpan>[
-                                  TextSpan(text: '322'),
+                                children: <TextSpan>[
                                   TextSpan(
-                                    text: ' km/h',
+                                      text: widget.vehicle.kilometrage
+                                          .toString()),
+                                  const TextSpan(
+                                    text: ' km',
                                     style: TextStyle(
                                       color: Colors.white38,
                                     ),
@@ -104,7 +111,7 @@ class _DetailCarsState extends State<DetailCars> {
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      padding: EdgeInsets.symmetric(horizontal: 40),
                       decoration: BoxDecoration(
                           color: Colors.black87,
                           borderRadius: BorderRadius.circular(20)),
@@ -130,8 +137,10 @@ class _DetailCarsState extends State<DetailCars> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w300,
                                 ),
-                                children: const <TextSpan>[
-                                  TextSpan(text: 'Liftback'),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text:
+                                          '${widget.vehicle.nb_places.toString()} places'),
                                 ],
                               ),
                             ),
@@ -160,13 +169,13 @@ class _DetailCarsState extends State<DetailCars> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.directions_walk,
+                          const Icon(
+                            Icons.location_pin,
                             size: 24,
                             color: Colors.black54,
                           ),
                           Text(
-                            "344m",
+                            widget.vehicle.center?.town ?? "",
                             style: GoogleFonts.montserrat(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
@@ -176,20 +185,20 @@ class _DetailCarsState extends State<DetailCars> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
                     children: [
-                      Icon(
-                        Icons.location_pin,
+                      const Icon(
+                        Icons.home_filled,
                         color: Colors.blue,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(
-                        "Mansfield Avenu, Los Angeles, CA",
+                        '${widget.vehicle.center?.name} - ${widget.vehicle.center?.address}',
                         style: GoogleFonts.montserrat(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -202,15 +211,20 @@ class _DetailCarsState extends State<DetailCars> {
             ),
           ],
         ),
-        bottomSheet: PriceAndBookNow(),
+        bottomSheet: PriceAndBookNow(
+          vehicle: widget.vehicle,
+        ),
       ),
     );
   }
 }
 
 class PriceAndBookNow extends StatelessWidget {
+  final Vehicle vehicle;
+
   const PriceAndBookNow({
     Key? key,
+    required this.vehicle,
   }) : super(key: key);
 
   @override
@@ -226,9 +240,9 @@ class PriceAndBookNow extends StatelessWidget {
                   fontSize: 20,
                   color: Colors.black87,
                   fontWeight: FontWeight.w500),
-              children: const <TextSpan>[
-                TextSpan(text: '\$180'),
-                TextSpan(
+              children: <TextSpan>[
+                TextSpan(text: '\$${vehicle.amount_excluding}'),
+                const TextSpan(
                     text: '/day', style: TextStyle(color: Colors.black38)),
               ],
             ),
@@ -239,21 +253,20 @@ class PriceAndBookNow extends StatelessWidget {
           height: 60,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => DetailCars()));
+              //mettre la page ou executer la fonction pour faire une location
             },
-            child: Text(
-              "Book now",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, fontSize: 18),
-            ),
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              shape: new RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                 ),
               ),
+            ),
+            child: Text(
+              "Book now",
+              style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w400, fontSize: 18),
             ),
           ),
         )
@@ -263,16 +276,19 @@ class PriceAndBookNow extends StatelessWidget {
 }
 
 class TopMenuAndShowcase extends StatelessWidget {
+  final Vehicle vehicle;
+
   const TopMenuAndShowcase({
     Key? key,
+    required this.vehicle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 350,
-      decoration: BoxDecoration(
+      height: 280,
+      decoration: const BoxDecoration(
         color: Colors.black87,
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(50),
@@ -318,8 +334,8 @@ class TopMenuAndShowcase extends StatelessWidget {
                                 spreadRadius: 0.5)
                           ],
                         ),
-                        child: Image.asset(
-                          "assets/logos/ic_tesla_black.png",
+                        child: Image.network(
+                          vehicle.brandUri!,
                           width: 25,
                           height: 25,
                         ),
@@ -334,8 +350,7 @@ class TopMenuAndShowcase extends StatelessWidget {
                               style: GoogleFonts.montserrat(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.white
-                              ),
+                                  color: Colors.white),
                             ),
                             Text(
                               "2021",

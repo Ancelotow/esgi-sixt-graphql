@@ -27,9 +27,13 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
         edges {
           node {
             id
+            nbPlaces
             amountExcluding
             model {
               name
+              brand {
+                logoUri
+              }
             }
             center {    
               id      
@@ -38,6 +42,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
               }
             }
             imageUri
+            kilometrage
           }
         }
       }
@@ -58,13 +63,16 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
         for (var edge in edges) {
           Vehicle vehicle = Vehicle(
             id: edge['node']['id'],
+            nb_places: edge['node']['nbPlaces'],
             amount_excluding: edge['node']['amountExcluding'],
             model: edge['node']['model']['name'],
+            brandUri: edge['node']['model']['brand']['logoUri'],
             center: CenterVehicle(
               id: edge['node']['center']['id'],
               town: edge['node']['center']['town']['name'],
             ),
             imageUri: edge['node']['imageUri'] ?? "",
+            kilometrage: edge['node']['kilometrage'],
           );
 
           listVehicles.add(vehicle);
