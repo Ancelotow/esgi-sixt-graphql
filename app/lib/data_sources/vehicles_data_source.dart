@@ -1,7 +1,7 @@
 import 'package:app/models/vehicles.dart';
 
 abstract class VehiclesDataSource {
-  Future<List<Vehicle>> getAllVehicles();
+  Stream<List<Vehicle>> getAllVehicles();
 
   Future<String> addVehicle(Vehicle vehicle);
 

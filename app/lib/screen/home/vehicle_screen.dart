@@ -41,75 +41,86 @@ class _VehicleScreenState extends State<VehicleScreen> {
         create: (context) => VehiclesBloc(
           repository: RepositoryProvider.of<VehiclesRepository>(context),
         )..add(GetAllVehicles()),
-        child: SafeArea(
-          child: Column(
+        child: Scaffold(
+          body: Column(
             children: [
               SearchButton(),
               BrandList(),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 23),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Available cars",
-                            style: GoogleFonts.montserrat(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Available cars",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              print("filter cars");
-                            },
-                            icon: Icon(Icons.sort),
-                          )
-                        ],
-                      ),
-                      Builder(
-                        builder: (context) {
-                          return Scaffold(
-                            body: Stack(
-                              children: [
-                                BlocBuilder<VehiclesBloc, VehiclesState>(
-                                  builder: (context, state) {
-                                    switch (state.status) {
-                                      case VehiclesStatus.loading:
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      case VehiclesStatus.error:
-                                        return Center(
-                                          child: Text(
-                                            state.error,
-                                          ),
-                                        );
-                                      case VehiclesStatus.success:
-                                      default:
-                                        return ListView.builder(
-                                          itemCount: state.vehicles.length,
-                                          itemBuilder: (context, index) {
-                                            final vehicle = state.vehicles[index];
-                                            return CarItem(
-                                              vehicle: vehicle,
-                                              onTap: () =>
-                                                  _onVehicleTap(context, vehicle),
+                            IconButton(
+                              onPressed: () {
+                                print("filter cars");
+                              },
+                              icon: Icon(Icons.sort),
+                            )
+                          ],
+                        ),
+                        Builder(
+                          builder: (context) {
+                            return Container(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height,
+                              child: Stack(
+                                children: [
+                                  BlocBuilder<VehiclesBloc, VehiclesState>(
+                                    builder: (context, state) {
+                                      switch (state.status) {
+                                        case VehiclesStatus.loading:
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        case VehiclesStatus.error:
+                                          return Center(
+                                            child: Text(
+                                              state.error,
+                                            ),
+                                          );
+                                        case VehiclesStatus.success:
+                                        default:
+                                          if (state.vehicles.isEmpty) {
+                                            return const Center(
+                                              child: Text(
+                                                  "Aucune Voiture, Attendez les prochaines locations !"),
                                             );
-                                          },
-                                        );
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                                          }
+                                          return ListView.builder(
+                                            itemCount: state.vehicles.length,
+                                            itemBuilder: (context, index) {
+                                              final vehicle =
+                                                  state.vehicles[index];
+                                              return CarItem(
+                                                vehicle: vehicle,
+                                                onTap: () => _onVehicleTap(
+                                                    context, vehicle),
+                                              );
+                                            },
+                                          );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

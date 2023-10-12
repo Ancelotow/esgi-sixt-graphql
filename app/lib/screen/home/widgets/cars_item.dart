@@ -22,7 +22,7 @@ class CarItem extends StatelessWidget {
         children: [
 
           Positioned(
-            top: 30,
+            top: 50,
             left: 0,
             right: 0,
             child: Container(
@@ -112,7 +112,8 @@ class CarItem extends StatelessWidget {
             top: 5,
             left: 15,
             child: Image.asset(
-              vehicle.imageUri ?? "assets/images/tesla_1.png",
+              //vehicle.imageUri
+              "assets/images/tesla_1.png",
               width: 150,
               height: 100,
             ),
