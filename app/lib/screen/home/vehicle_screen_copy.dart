@@ -5,20 +5,20 @@ import 'package:app/screen/home/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class VehicleScreen extends StatefulWidget {
-  static const String routeName = '/RentScreen';
+class VehicleScreenCopy extends StatefulWidget {
+  static const String routeName = '/VehicleScreenCopy';
 
   static void navigateTo(BuildContext context) {
     Navigator.of(context).pushNamed(routeName);
   }
 
-  const VehicleScreen({Key? key}) : super(key: key);
+  const VehicleScreenCopy({Key? key}) : super(key: key);
 
   @override
-  _VehicleScreenState createState() => _VehicleScreenState();
+  _VehicleScreenCopyState createState() => _VehicleScreenCopyState();
 }
 
-class _VehicleScreenState extends State<VehicleScreen> {
+class _VehicleScreenCopyState extends State<VehicleScreenCopy> {
   int _selectedPageIndex = 0;
 
   void setSelectedIndex(int index) {

@@ -8,7 +8,7 @@ class VehiclesRepository {
     required this.vehiclesDataSource,
   });
 
-  Future<List<Vehicle>> getAllVehicles() {
+  Stream<List<Vehicle>> getAllVehicles() {
     return vehiclesDataSource.getAllVehicles();
   }
 

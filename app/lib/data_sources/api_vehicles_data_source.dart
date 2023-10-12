@@ -19,7 +19,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
   }
 
   @override
-  Future<List<Vehicle>> getAllVehicles() async {
+  Stream<List<Vehicle>> getAllVehicles() {
     const String get30Vehicles = r'''
     query {
       vehicles (first: 30) {
@@ -47,30 +47,30 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       document: gql(get30Vehicles),
     );
 
-    final QueryResult result = await client.value.query(options);
-    List<Vehicle> listVehicles = [];
+    return Stream.fromFuture(client.value.query(options)).asyncExpand((result) {
+      if (result.hasException) {
+        return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
+      } else {
+        final List<dynamic> edges = result.data!['vehicles']['edges'];
+        List<Vehicle> listVehicles = [];
 
-    if (result.hasException) {
-      throw Exception('Erreur GraphQL: ${result.exception.toString()}');
-    } else {
-      final List<dynamic> edges = result.data!['vehicles']['edges'];
+        for (var edge in edges) {
+          Vehicle vehicle = Vehicle(
+            id: edge['node']['id'],
+            amount_excluding: edge['node']['amountExcluding'],
+            model: edge['node']['model']['name'],
+            center: CenterVehicle(
+              id: edge['node']['center']['id'],
+              town: edge['node']['center']['town']['name'],
+            ),
+            imageUri: edge['node']['imageUri'] ?? "",
+          );
 
-      for (var edge in edges) {
-        Vehicle vehicle = Vehicle(
-          id: edge['node']['id'],
-          amount_excluding: edge['node']['amountExcluding'],
-          model: edge['node']['model']['name'],
-          center: CenterVehicle(
-            id: edge['node']['center']['id'],
-            town: edge['node']['center']['town']['name'],
-          ),
-          imageUri: edge['node']['imageUri'] ?? "",
-        );
-
-        listVehicles.add(vehicle);
+          listVehicles.add(vehicle);
+        }
+        return Stream.value(listVehicles);
       }
-    }
-    return listVehicles;
+    });
   }
 
   @override
