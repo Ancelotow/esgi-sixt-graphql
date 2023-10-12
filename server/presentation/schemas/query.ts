@@ -1,5 +1,13 @@
 import BrandController from "../../domain/controllers/brandController";
-import {GraphQLList, GraphQLNonNull, GraphQLObjectType} from "graphql";
+import {
+    GraphQLInt,
+    GraphQLList,
+    GraphQLNonNull,
+    GraphQLObjectType,
+    GraphQLInputType,
+    GraphQLInputObjectType,
+    GraphQLError
+} from "graphql";
 import {brandType} from "./types/brandType";
 import {typeVehicleType} from "./types/typeVehicleType";
 import VehicleTypeController from "../../domain/controllers/vehicleTypeController";
@@ -18,6 +26,8 @@ import RentController from "../../domain/controllers/rentController";
 import {connectionFromArraySlice, forwardConnectionArgs, getOffsetWithDefault} from "graphql-relay";
 import {rentConnection} from "./connection/rentConnection";
 import {vehicleConnection} from "./connection/vehicleConnection";
+import VehicleFilter from './inputs/VehicleFilterInput';
+import vehicleInterface from "./interfaces/Vehicle";
 
 export default new GraphQLObjectType({
     name: 'Query',
@@ -58,6 +68,18 @@ export default new GraphQLObjectType({
                 })
             }
         },
+        vehiclesFilter: {
+            type: new GraphQLList(vehicleInterface),
+            args: {
+                filter: {
+                    type: VehicleFilter,
+                    description: 'The car filters'
+                }
+            },
+            resolve: async (_, args) => {
+                return await VehicleController.getAllFiltered(args.filter.maxKilometrage, args.filter.minimumPlaces)
+            }
+        },
         fuels: {
             type: new GraphQLList(fuelType),
             resolve: () => FuelController.getAll()
@@ -65,9 +87,20 @@ export default new GraphQLObjectType({
         rents: {
             type: new GraphQLNonNull(rentConnection),
             args: forwardConnectionArgs,
-            resolve: async (_, args) => {
+            resolve: async (_, args, context) => {
                 const offset = getOffsetWithDefault(args.after, 0);
-                let rents = await  RentController.getAll()
+                const user = (context.data) ? context.data.user : null;
+                if(!user) {
+                    throw new GraphQLError('Your are not authenticated',
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        { code: 'NOT_AUTHENTICATED', date: Date.now(), status: 403}
+                    );
+                }
+                let rents = await  RentController.getByUserId(user.id)
                 return connectionFromArraySlice(rents, args, {
                     sliceStart: offset,
                     arrayLength: rents.length,

@@ -7,7 +7,6 @@ import {
     GraphQLObjectType,
     GraphQLString
 } from "graphql";
-import Vehicle from "../../../domain/entities/vehicle";
 import {modelType} from "./modelType";
 import ModelController from "../../../domain/controllers/modelController";
 import {colorType} from "./colorType";
@@ -16,10 +15,11 @@ import {centerType} from "./centerType";
 import CenterController from "../../../domain/controllers/centerController";
 import VehicleController from "../../../domain/controllers/vehicleController";
 import {transmissionSystemType} from "./transmissionSystemType";
+import vehicleInterface from "../interfaces/Vehicle";
 
-// Ajouter un héritage sur les types de voitures
-const vehicleType = new GraphQLObjectType<Vehicle>({
-    name: 'Vehicle',
+export default new GraphQLObjectType({
+    name: 'Sedan',
+    interfaces: [vehicleInterface],
     fields: {
         id: { type: GraphQLNonNull(GraphQLID) },
         numberPlate: { type: GraphQLNonNull(GraphQLString) },
@@ -27,8 +27,6 @@ const vehicleType = new GraphQLObjectType<Vehicle>({
         kilometrage: { type: GraphQLNonNull(GraphQLFloat) },
         isAirConditioner: { type: GraphQLNonNull(GraphQLBoolean) },
         amountExcluding: { type: GraphQLFloat },
-        maxCharge: { type: GraphQLFloat },
-        maxSpeedAllowed: { type: GraphQLFloat },
         imageUri: { type: GraphQLString },
         transmission: {
             type: GraphQLNonNull(transmissionSystemType),
@@ -56,7 +54,5 @@ const vehicleType = new GraphQLObjectType<Vehicle>({
                 return true;
             }
         }
-    },
-})
-
-export {vehicleType}
+    }
+  });
