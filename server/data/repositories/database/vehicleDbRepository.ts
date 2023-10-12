@@ -1,6 +1,7 @@
 import VehicleRepository from "../../../domain/repositories/vehicleRepository";
 import VehicleDbDataSource from "../../data_sources/database/vehicleDbDataSource";
 import Vehicle from "../../../domain/entities/vehicle";
+import AddVehicleDto from "../../models/dto/addVehicleDto";
 
 class VehicleDbRepository implements VehicleRepository {
 
@@ -18,6 +19,11 @@ class VehicleDbRepository implements VehicleRepository {
 
     async updateVehicle(id: number, kilometrage: number): Promise<Vehicle> {
         let results = await this._dataSource.updateVehicle(id, kilometrage);
+        return results?.toEntity();
+    }
+
+    async addVehicle(vehicleInput: AddVehicleDto): Promise<Vehicle> {
+        let results = await this._dataSource.addVehicle(vehicleInput);
         return results?.toEntity();
     }
 

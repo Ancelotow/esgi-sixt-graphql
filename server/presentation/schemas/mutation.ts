@@ -4,6 +4,7 @@ import {addUserType} from "./mutators/addUser";
 import {updateVehicleType} from "./mutators/updateVehicle";
 import {updateRentStatusType} from "./mutators/updateRentStatus";
 import { createRentType } from "./mutators/createRent";
+import { addVehicleType } from "./mutators/addVehicle";
 
 export default new GraphQLObjectType({
     name: 'Mutation',
@@ -11,6 +12,7 @@ export default new GraphQLObjectType({
         login: loginType,
         addUser: addUserType,
         updateVehicle: updateVehicleType,
+        addVehicle: addVehicleType,
         updateRentStatus: updateRentStatusType,
         createRent: createRentType
     }

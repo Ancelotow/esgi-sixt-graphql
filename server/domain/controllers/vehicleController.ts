@@ -4,6 +4,7 @@ import VehicleDbRepository from "../../data/repositories/database/vehicleDbRepos
 import RentRepository from "../repositories/rentRepository";
 import Rent from "../entities/rent";
 import RentDbRepository from "../../data/repositories/database/rentDbRepository";
+import AddVehicleDto from "../../data/models/dto/addVehicleDto";
 
 class VehicleController {
 
@@ -31,6 +32,10 @@ class VehicleController {
 
     async updateVehicle(id: number, kilometrage: number): Promise<Vehicle> {
         return this._repository.updateVehicle(id, kilometrage);
+    }
+
+    async addVehicle(vehicleInput: AddVehicleDto): Promise<Vehicle> {
+        return this._repository.addVehicle(vehicleInput);
     }
 
 }
