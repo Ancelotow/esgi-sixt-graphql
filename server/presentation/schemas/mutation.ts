@@ -5,6 +5,7 @@ import {updateVehicleType} from "./mutators/updateVehicle";
 import {updateRentStatusType} from "./mutators/updateRentStatus";
 import { createRentType } from "./mutators/createRent";
 import { addVehicleType } from "./mutators/addVehicle";
+import { addCenterType } from "./mutators/addCenter";
 
 export default new GraphQLObjectType({
     name: 'Mutation',
@@ -14,6 +15,7 @@ export default new GraphQLObjectType({
         updateVehicle: updateVehicleType,
         addVehicle: addVehicleType,
         updateRentStatus: updateRentStatusType,
-        createRent: createRentType
+        createRent: createRentType,
+        addCenter: addCenterType,
     }
 })
