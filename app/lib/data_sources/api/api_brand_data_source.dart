@@ -27,10 +27,8 @@ class ApiBrandDataSource implements BrandDataSource {
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
-      final brandsDti = result.data!['brands'];
-      //result.map((e) => print(e));
-
-      return [];
+      final brandsDto = result.data!['brands'] as List<dynamic>;
+      return brandsDto.map((brand) => Brand.fromJson(brand)).toList();
     }
   }
 }

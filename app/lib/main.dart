@@ -1,5 +1,7 @@
+import 'package:app/data_sources/api/api_brand_data_source.dart';
 import 'package:app/data_sources/api/api_rents_data_source.dart';
 import 'package:app/domain/repository/rents_repository.dart';
+import 'package:app/presentation/logic/brands_bloc/brands_bloc.dart';
 import 'package:app/presentation/logic/rents_bloc/rents_bloc.dart';
 import 'package:app/presentation/logic/users_bloc/users_bloc.dart';
 import 'package:app/presentation/logic/vehicles_bloc/vehicles_bloc.dart';
@@ -18,6 +20,7 @@ import 'data_sources/api/api_users_data_source.dart';
 import 'data_sources/api/api_vehicles_data_source.dart';
 import 'domain/models/session.dart';
 import 'domain/models/users.dart';
+import 'domain/repository/brand_repository.dart';
 import 'domain/repository/users_repository.dart';
 import 'domain/repository/vehicles_repository.dart';
 
@@ -54,6 +57,11 @@ class MyApp extends StatelessWidget {
             rentDataSource: ApiRentsDataSource(client),
           ),
         ),
+        RepositoryProvider<BrandRepository>(
+          create: (context) => BrandRepository(
+            brandDataSource: ApiBrandDataSource(client),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -70,6 +78,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<RentsBloc>(
             create: (context) => RentsBloc(
               RepositoryProvider.of<RentsRepository>(context),
+            ),
+          ),
+          BlocProvider<BrandsBloc>(
+            create: (context) => BrandsBloc(
+              repository: RepositoryProvider.of<BrandRepository>(context),
             ),
           ),
         ],
