@@ -1,25 +1,17 @@
 import 'package:app/data_sources/users_data_source.dart';
 import 'package:app/domain/models/users.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class ApiUsersDataSource extends UsersDataSource {
-  late final HttpLink httpLink;
-  late final ValueNotifier<GraphQLClient> client;
+import '../../domain/models/session.dart';
 
-  ApiUsersDataSource() {
-    httpLink = HttpLink('${dotenv.env["API_BASE_URI"]}/graphql');
-    client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(
-        link: httpLink,
-        cache: GraphQLCache(),
-      ),
-    );
-  }
+class ApiUsersDataSource extends UsersDataSource {
+  final ValueNotifier<GraphQLClient> client;
+
+  ApiUsersDataSource(this.client);
 
   @override
-  Future<String> addUser(User user) async{
+  Future<String> addUser(User user) async {
     const String registerUser = r'''
     mutation AddUser($lastname: String!, $firstname: String!, $birthdayDate: String, $email: String!, $password: String!){
       addUser(input: {email: $email, password: $password, lastname: $lastname, firstname: $firstname, birthday_date: $birthdayDate}) {
@@ -94,13 +86,18 @@ class ApiUsersDataSource extends UsersDataSource {
 
   @override
   Future<void> loginUser(User user) async {
-    const String loginUser = r'''
+    const String query = r'''
     mutation Login($email: String!, $password: String!){
       login(input: {email: $email, password: $password}) {
         session {
           token
           user {
+            id
             firstname
+            lastname
+            email
+            birthdayDate
+            isAdmin
           }
         }
       }
@@ -108,7 +105,7 @@ class ApiUsersDataSource extends UsersDataSource {
     ''';
 
     final QueryOptions options = QueryOptions(
-      document: gql(loginUser),
+      document: gql(query),
       variables: {
         'email': user.email,
         'password': user.password,
@@ -120,8 +117,10 @@ class ApiUsersDataSource extends UsersDataSource {
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
-      final String accessToken = result.data!['login']['session']['token'];
-      // Enregistrer l'accessToken par exemple.
+      final sessionJson = result.data!['login']['session'];
+      final String token = sessionJson['token'];
+      final user = User.fromJson(sessionJson['user']);
+      Session.instance().setSession(token, user);
     }
   }
 

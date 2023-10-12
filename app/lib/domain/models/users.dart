@@ -1,5 +1,3 @@
-
-
 import 'package:app/domain/models/rents.dart';
 
 class User {
@@ -9,7 +7,7 @@ class User {
   final String? lastname;
   final String email;
   final String? birthdayDate;
-  final List<Rent>? rents;
+  final bool isAdmin;
 
 
   User({
@@ -18,9 +16,21 @@ class User {
     this.firstname,
     this.lastname,
     required this.email,
+    this.isAdmin = false,
     this.birthdayDate,
-    this.rents,
   });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      password: "",
+      firstname: json['firstname'],
+      lastname: json['lastname'],
+      email: json['email'],
+      birthdayDate: json['birthdayDate'],
+      isAdmin: json['isAdmin'],
+    );
+  }
 
   User copyWith({
     String? id,
@@ -29,7 +39,7 @@ class User {
     String? lastname,
     String? email,
     String? birthdayDate,
-    List<Rent>? rents,
+    bool? isAdmin,
   }) {
     return User(
       id: id ?? this.id,
@@ -38,7 +48,7 @@ class User {
       lastname: lastname ?? this.lastname,
       email: email ?? this.email,
       birthdayDate: birthdayDate ?? this.birthdayDate,
-      rents: rents ?? this.rents,
+      isAdmin: isAdmin ?? this.isAdmin,
     );
   }
 }
