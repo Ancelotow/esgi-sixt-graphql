@@ -17,6 +17,11 @@ class CenterDbRepository implements CenterRepository {
         return results.toEntity();
     }
 
+    async delete(centerId: number): Promise<Center> {
+        let results = await this._dataSource.delete(centerId);
+        return results.toEntity();
+    }
+
 }
 
 export default CenterDbRepository

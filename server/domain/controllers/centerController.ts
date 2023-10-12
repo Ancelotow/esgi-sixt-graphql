@@ -20,6 +20,10 @@ class CenterController {
         return this._repository.add(center);
     }
 
+    async delete(centerId: number): Promise<Center> {
+        return this._repository.delete(centerId);
+    }
+
 }
 
 export default new CenterController();
