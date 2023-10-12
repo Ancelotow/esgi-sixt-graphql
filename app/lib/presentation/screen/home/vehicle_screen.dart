@@ -1,12 +1,13 @@
-import 'package:app/data_sources/api_vehicles_data_source.dart';
-import 'package:app/repository/vehicles_repository.dart';
-import 'package:app/screen/home/widgets/brand_list.dart';
-import 'package:app/screen/home/widgets/cars_item.dart';
-import 'package:app/screen/home/widgets/search_button.dart';
-import 'package:app/vehicles_bloc/vehicles_bloc.dart';
+import 'package:app/presentation/screen/home/widgets/brand_list.dart';
+import 'package:app/presentation/screen/home/widgets/cars_item.dart';
+import 'package:app/presentation/screen/home/widgets/search_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../data_sources/api/api_vehicles_data_source.dart';
+import '../../../domain/repository/vehicles_repository.dart';
+import '../../logic/vehicles_bloc/vehicles_bloc.dart';
 
 class VehicleScreen extends StatefulWidget {
   static const String routeName = '/VehicleScreen';

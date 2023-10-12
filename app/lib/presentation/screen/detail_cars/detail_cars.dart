@@ -1,6 +1,6 @@
-import 'package:app/models/vehicles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../domain/models/vehicles.dart';
 
 class DetailCars extends StatefulWidget {
   final Vehicle vehicle;
