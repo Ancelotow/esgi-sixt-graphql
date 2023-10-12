@@ -1,4 +1,7 @@
+import 'package:app/domain/models/rents.dart';
+import 'package:app/presentation/logic/rents_bloc/rents_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../domain/models/vehicles.dart';
 
@@ -276,29 +279,68 @@ class PriceAndBookNow extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 170,
-          height: 60,
-          child: ElevatedButton(
-            onPressed: () {
-              //mettre la page ou executer la fonction pour faire une location
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                ),
-              ),
-            ),
-            child: Text(
-              "Book now",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, fontSize: 18),
-            ),
-          ),
-        )
+        BlocConsumer<RentsBloc, RentsState>(
+          listener: (context, state) {
+            if (state.status == RentsStatus.editSuccess) {
+              debugPrint("rents : ${state.rents}");
+              _showSnackBar(context, 'Location réservée', Colors.greenAccent);
+              Navigator.of(context).pop();
+            } else if (state.status == RentsStatus.error) {
+              debugPrint(state.error);
+              _showSnackBar(context, state.error, Colors.orangeAccent);
+            }
+          },
+          builder: (context, state) {
+            switch (state.status) {
+              case RentsStatus.loading:
+                return const CircularProgressIndicator();
+              default:
+                return SizedBox(
+                  width: 170,
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: () => _onAddRent(context),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "Book now",
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400, fontSize: 18),
+                    ),
+                  ),
+                );
+            }
+          },
+        ),
       ],
+    );
+  }
+
+  void _onAddRent(BuildContext context) {
+    var bloc = BlocProvider.of<RentsBloc>(context);
+    final rent = Rent(
+      id: '',
+      nbDays: 5,
+      //à changer soit par formulaire ou voir !!!!!!!!!!!!!
+      amountExcluding: vehicle.amount_excluding!,
+      vehicleId: int.parse(vehicle.id),
+      status: "RENTED",
+    );
+    bloc.add(AddRent(rent: rent));
+  }
+
+  void _showSnackBar(BuildContext context, String text, Color background) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+        backgroundColor: background,
+      ),
     );
   }
 }

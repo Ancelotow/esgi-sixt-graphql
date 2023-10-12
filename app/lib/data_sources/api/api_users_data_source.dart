@@ -2,7 +2,6 @@ import 'package:app/data_sources/users_data_source.dart';
 import 'package:app/domain/models/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
 import '../../domain/models/session.dart';
 
 class ApiUsersDataSource extends UsersDataSource {
