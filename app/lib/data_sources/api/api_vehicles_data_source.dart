@@ -80,40 +80,64 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
 
   @override
   Future<String> addVehicle(Vehicle vehicle) async {
-    // TODO: implement addUser
-    throw UnimplementedError();
-    /*
-    const String registerUser = r'''
-    mutation AddUser($lastname: String!, $firstname: String!, $birthdayDate: String, $email: String!, $password: String!){
-      addUser(input: {email: $email, password: $password, lastname: $lastname, firstname: $firstname, birthday_date: $birthdayDate}) {
-        user{
+    const String query = r'''
+    mutation AddVehicle($numberPlate: String!, $nbPlaces: int!, $kilometrage: int!, $isAirConditioner: bool!, $amountExcluding: int!, $maxCharge: int, $modelId: String!, $colorId: String!, $centerId: String!, $maxSpeedAllowed: int!, $imageUri: String!, $transmissionId: int!) {
+      addVehicle(input: {$numberPlate, $nbPlaces, $kilometrage, $isAirConditioner, $amountExcluding, $maxCharge, $modelId, $colorId, $centerId, $maxSpeedAllowed, $imageUri, $transmissionId}) {
+        vehicle{
           id
-          firstname
+            nbPlaces
+            amountExcluding
+            model {
+              name
+              brand {
+                logoUri
+              }
+            }
+            center {    
+              id
+              name
+              address
+              town {
+                inseeCode
+                zipCode
+                name
+              }
+            }
+            imageUri
+            kilometrage
         }
       }
     }
     ''';
 
     final QueryOptions options = QueryOptions(
-      document: gql(registerUser),
+      document: gql(query),
       variables: {
-        'lastname': user.lastname,
-        'firstname': user.firstname,
-        'email': user.email,
-        'password': user.password,
+        'numberPlate': vehicle.number_plate,
+        'nbPlaces': vehicle.nb_places,
+        'kilometrage': vehicle.kilometrage,
+        'isAirConditioner': vehicle.is_air_conditioner,
+        'amountExcluding': vehicle.amount_excluding,
+        'maxCharge': vehicle.max_charge,
+        'modelId': vehicle.model!.id,
+        'colorId': vehicle.color?.id,
+        'centerId': vehicle.center!.id,
+        'maxSpeedAllowed': vehicle.max_speed_allowed,
+        'imageUri': vehicle.imageUri,
+        'transmissionId': vehicle.transmission ?? "1"
       },
     );
 
-    final QueryResult result = await client.value.query(options);
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
 
     if (result.hasException) {
       print(result.exception.toString());
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
-      final String idUser = result.data!['addUser']['user']['id'];
-      return idUser;
+      final String idVehicle = result.data!['addVehicle']['vehicle']['id'];
+      return idVehicle;
     }
-     */
+
   }
 
   @override
