@@ -22,6 +22,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     VehicleScreen(),
+    VehicleScreen(),
     AdminScreen(),
   ];
 
@@ -38,6 +39,10 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
           const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
           ),
           if (Session.instance().user?.isAdmin ?? false)
             const BottomNavigationBarItem(
