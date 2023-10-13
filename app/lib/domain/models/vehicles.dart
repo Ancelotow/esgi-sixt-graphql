@@ -1,5 +1,6 @@
 import 'package:app/domain/models/brand.dart';
 import 'package:app/domain/models/brand_model.dart';
+import 'package:app/domain/models/color.dart';
 import 'centers.dart';
 
 class Vehicle {
@@ -12,7 +13,7 @@ class Vehicle {
   final int? max_charge;
   final int? max_speed_allowed;
   final BrandModel? model;
-  final String? color;
+  final VehicleColor? color;
   final CenterVehicle? center;
   final String? transmission;
   final String? imageUri;
@@ -44,7 +45,7 @@ class Vehicle {
     int? max_charge,
     int? max_speed_allowed,
     BrandModel? model,
-    String? color,
+    VehicleColor? color,
     CenterVehicle? center,
     String? transmission,
     String? imageUri,

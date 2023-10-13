@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../domain/models/vehicles.dart';
 import '../../widgets/center_card.dart';
 import '../home/widgets/cars_item.dart';
+import 'add_vehicle_screen.dart';
 
 class AdminScreen extends StatelessWidget {
   List<CenterVehicle> centers = [];
@@ -68,15 +69,27 @@ class AdminScreen extends StatelessWidget {
           height: 2,
           color: Colors.black12,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Vehicles",
-            style: GoogleFonts.montserrat(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Vehicles",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => AddVehicleScreen.navigateTo(context),
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ],
         ),
         Expanded(
           child: BlocBuilder<VehiclesBloc, VehiclesState>(
