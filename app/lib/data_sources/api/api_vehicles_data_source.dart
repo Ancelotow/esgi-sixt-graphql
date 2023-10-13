@@ -1,14 +1,12 @@
 import 'package:app/data_sources/vehicles_data_source.dart';
 import 'package:app/domain/models/brand.dart';
+import 'package:app/domain/models/town.dart';
 import 'package:app/domain/models/vehicles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/domain/models/centers.dart';
+import '../../domain/models/session.dart';
 
 class ApiVehiclesDataSource extends VehiclesDataSource {
-  final ValueNotifier<GraphQLClient> client;
-
-  ApiVehiclesDataSource(this.client);
 
   @override
   Stream<List<Vehicle>> getAllVehicles() {
@@ -34,6 +32,8 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
               name
               address 
               town {
+                inseeCode
+                zipCode
                 name
               }
             }
@@ -49,7 +49,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       document: gql(get30Vehicles),
     );
 
-    return Stream.fromFuture(client.value.query(options)).asyncExpand((result) {
+    return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
       if (result.hasException) {
         return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
       } else {
@@ -261,7 +261,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       document: gql(getFilterVehicles),
     );
 
-    return Stream.fromFuture(client.value.query(options)).asyncExpand((result) {
+    return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
       if (result.hasException) {
         return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
       } else {

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../domain/models/brand.dart';
+import '../../../logic/brands_bloc/brands_bloc.dart';
+import 'brand_item.dart';
 
 class BrandList extends StatefulWidget {
   const BrandList({
@@ -11,29 +15,9 @@ class BrandList extends StatefulWidget {
 }
 
 class _BrandListState extends State<BrandList> {
+  List<Brand> brands = [];
   int _brandCategoryIndex = 0;
-  var brandList = [
-    {
-      "name": "all",
-      "icon": "",
-    },
-    {
-      "name": "tesla",
-      "icon": "assets/logos/ic_tesla_black.png",
-    },
-    {
-      "name": "audi",
-      "icon": "assets/logos/ic_audi_black.png",
-    },
-    {
-      "name": "mitsubishi",
-      "icon": "assets/logos/ic_mitsubish_black.png",
-    },
-    {
-      "name": "peugeot",
-      "icon": "assets/logos/ic_peugeot.png",
-    },
-  ];
+
 
   void setBrandIndex(int currentIndex) {
     setState(() {
@@ -43,112 +27,73 @@ class _BrandListState extends State<BrandList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Text(
-              "Brands",
-              style: GoogleFonts.montserrat(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+    BlocProvider.of<BrandsBloc>(context).add(GetAllBrands());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Text(
+            "Brands",
+            style: GoogleFonts.montserrat(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          Container(
-            height: 100,
-            width: double.infinity,
-            child: ListView.builder(
-              itemCount: brandList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return GestureDetector(
-                    onTap: () {
-                      setBrandIndex(index);
-                      print(brandList[index]["name"]!);
-                    },
-                    child: BrandItem(
-                      imgAsset: brandList[index]["icon"]!,
-                      index: 0,
-                      isSelected: (_brandCategoryIndex == index) ? true : false,
-                    ),
-                  );
-                } else {
-                  return GestureDetector(
-                    onTap: () {
-                      setBrandIndex(index);
-                      print(brandList[index]["name"]!);
-                    },
-                    child: BrandItem(
-                      imgAsset: brandList[index]["icon"]!,
-                      index: index,
-                      isSelected: (_brandCategoryIndex == index) ? true : false,
-                    ),
-                  );
-                }
-              },
+        ),
+        SizedBox(
+          height: 100,
+          width: double.infinity,
+          child: BlocBuilder<BrandsBloc, BrandsState>(
+            builder: (context, state) {
+              if (state.status == BrandsStatus.loading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state.status == BrandsStatus.success) {
+                brands = [Brand(id: 0, name: "All", logoUri: "")];
+                brands.addAll(state.brands);
+                return _body(context);
+              } else if (state.status == BrandsStatus.error) {
+                return Center(
+                  child: Text(state.error),
+                );
+              }
+              return _body(context);
+            },
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    return ListView.builder(
+      itemCount: brands.length,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return GestureDetector(
+            onTap: () => setBrandIndex(index),
+            child: BrandItem(
+              brand: brands[index],
+              index: 0,
+              isSelected: (_brandCategoryIndex == index) ? true : false,
             ),
-          )
-        ],
-      ),
+          );
+        } else {
+          return GestureDetector(
+            onTap: () => setBrandIndex(index),
+            child: BrandItem(
+              brand: brands[index],
+              index: index,
+              isSelected: (_brandCategoryIndex == index) ? true : false,
+            ),
+          );
+        }
+      },
     );
   }
 }
 
-class BrandItem extends StatelessWidget {
-  final String imgAsset;
-  final int index;
-  final bool isSelected;
 
-  const BrandItem({
-    Key? key,
-    required this.imgAsset,
-    required this.index,
-    required this.isSelected,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: (index == 0)
-          ? EdgeInsets.fromLTRB(20, 12, 10, 12)
-          : EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-      padding: (index == 0)
-          ? EdgeInsets.symmetric(vertical: 20, horizontal: 25)
-          : EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: (isSelected)
-            ? Colors.blue
-            : (index == 0)
-                ? Colors.black12
-                : Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 7,
-            spreadRadius: 0.5,
-          ),
-        ],
-      ),
-      child: (index == 0)
-          ? Center(
-              child: Text(
-                "All",
-                style: GoogleFonts.montserrat(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            )
-          : Image.asset(
-              imgAsset,
-              width: 30,
-              height: 30,
-            ),
-    );
-  }
-}

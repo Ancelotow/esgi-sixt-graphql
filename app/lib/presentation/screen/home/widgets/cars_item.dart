@@ -51,7 +51,7 @@ class CarItem extends StatelessWidget {
                               fontSize: 20, fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          vehicle.center!.town!,
+                          vehicle.center!.town!.inseeCode,
                           style: GoogleFonts.montserrat(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,

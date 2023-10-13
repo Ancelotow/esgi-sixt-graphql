@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ApiRentsDataSource extends RentsDataSource {
-  final ValueNotifier<GraphQLClient> client;
 
-  ApiRentsDataSource(this.client);
 
   @override
   Future<String> addRent(Rent rent) async{
