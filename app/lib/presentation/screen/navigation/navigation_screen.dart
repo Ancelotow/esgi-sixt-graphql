@@ -1,6 +1,7 @@
 import 'package:app/domain/models/session.dart';
 import 'package:app/presentation/screen/admin/admin_screen.dart';
 import 'package:app/presentation/screen/home/vehicle_screen.dart';
+import 'package:app/presentation/screen/profile/profil_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../signIn_signUp/home_screen.dart';
@@ -22,7 +23,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     VehicleScreen(),
-    VehicleScreen(),
+    ProfilScreen(),
     AdminScreen(),
   ];
 
