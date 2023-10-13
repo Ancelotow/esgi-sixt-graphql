@@ -1,7 +1,7 @@
 import 'package:app/data_sources/rents_data_source.dart';
 import 'package:app/domain/models/rents.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import '../../domain/models/session.dart';
 
 class ApiRentsDataSource extends RentsDataSource {
 
@@ -30,7 +30,7 @@ class ApiRentsDataSource extends RentsDataSource {
       },
     );
 
-    final QueryResult result = await client.value.query(options);
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
 
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');

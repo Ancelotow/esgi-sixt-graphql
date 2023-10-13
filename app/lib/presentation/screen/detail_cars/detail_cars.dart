@@ -420,7 +420,7 @@ class TopMenuAndShowcase extends StatelessWidget {
                           ],
                         ),
                         child: Image.network(
-                          vehicle.brand!.logoUri,
+                          vehicle.model!.brand.logoUri,
                           width: 25,
                           height: 25,
                         ),
@@ -431,14 +431,14 @@ class TopMenuAndShowcase extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              vehicle.brand!.name,
+                              vehicle.model!.name,
                               style: GoogleFonts.montserrat(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white),
                             ),
                             Text(
-                              vehicle.brand!.releaseYear.toString(),
+                              vehicle.model!.releaseYear.toString(),
                               style: GoogleFonts.montserrat(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,

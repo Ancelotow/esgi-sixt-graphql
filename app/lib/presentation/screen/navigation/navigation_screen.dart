@@ -21,7 +21,7 @@ class NavigatorScreen extends StatefulWidget {
 class _NavigatorScreenState extends State<NavigatorScreen> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
-    const VehicleScreen(),
+    VehicleScreen(),
     AdminScreen(),
   ];
 
