@@ -66,4 +66,22 @@ class Vehicle {
       imageUri: imageUri ?? this.imageUri,
     );
   }
+
+  factory Vehicle.fromJson(Map<String, dynamic> json) {
+    return Vehicle(
+      id: json['id'],
+      number_plate: json['number_plate'],
+      nb_places: json['nb_places'],
+      kilometrage: json['kilometrage'],
+      is_air_conditioner: json['is_air_conditioner'],
+      amount_excluding: json['amount_excluding'],
+      max_charge: json['max_charge'],
+      max_speed_allowed: json['max_speed_allowed'],
+      model: (json['model'] != null) ? BrandModel.fromJson(json['model']) : null,
+      color: (json['color'] != null) ? VehicleColor.fromJson(json['color']) : null,
+      center: (json['center'] != null) ? CenterVehicle.fromJson(json['center']) : null,
+      transmission: json['transmission'],
+      imageUri: json['imageUri'],
+    );
+  }
 }

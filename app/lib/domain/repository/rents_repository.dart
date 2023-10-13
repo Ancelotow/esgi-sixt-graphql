@@ -9,9 +9,7 @@ class RentsRepository {
     required this.rentDataSource,
   });
 
-  Future<List<Rent>> getAllRents() {
-    return rentDataSource.getAllRents();
-  }
+  Future<List<Rent>> getAllRents() => rentDataSource.getAllRents();
 
   Future<void> editRent(Rent rent) {
     return rentDataSource.editRent(rent);

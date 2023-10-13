@@ -13,9 +13,11 @@ class RentsBloc extends Bloc<RentsEvent, RentsState> {
     on<GetAllRents>((event, emit) async {
       emit(state.copyWith(status: RentsStatus.loading));
       try {
-        await repository.getAllRents();
-        emit(state.copyWith(status: RentsStatus.success));
+        final rents = await repository.getAllRents();
+        print("rentgs : $rents");
+        emit(state.copyWith(status: RentsStatus.success, rents: rents));
       } catch (e) {
+        print(e);
         String errorMessage = e.toString().replaceAll('Exception: ', '');
         emit(state.copyWith(error: errorMessage, status: RentsStatus.error));
       }
