@@ -6,9 +6,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../../domain/models/session.dart';
 
 class ApiUsersDataSource extends UsersDataSource {
-  final ValueNotifier<GraphQLClient> client;
-
-  ApiUsersDataSource(this.client);
 
   @override
   Future<String> addUser(User user) async {
@@ -33,7 +30,7 @@ class ApiUsersDataSource extends UsersDataSource {
       },
     );
 
-    final QueryResult result = await client.value.query(options);
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
 
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
@@ -112,7 +109,7 @@ class ApiUsersDataSource extends UsersDataSource {
       },
     );
 
-    final QueryResult result = await client.value.query(options);
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
 
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');

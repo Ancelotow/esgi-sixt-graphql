@@ -5,10 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/domain/models/centers.dart';
 
-class ApiVehiclesDataSource extends VehiclesDataSource {
-  final ValueNotifier<GraphQLClient> client;
+import '../../domain/models/session.dart';
 
-  ApiVehiclesDataSource(this.client);
+class ApiVehiclesDataSource extends VehiclesDataSource {
 
   @override
   Stream<List<Vehicle>> getAllVehicles() {
@@ -48,7 +47,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       document: gql(get30Vehicles),
     );
 
-    return Stream.fromFuture(client.value.query(options)).asyncExpand((result) {
+    return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
       if (result.hasException) {
         return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
       } else {
