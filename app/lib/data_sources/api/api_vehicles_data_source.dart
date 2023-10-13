@@ -81,8 +81,8 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
   @override
   Future<String> addVehicle(Vehicle vehicle) async {
     const String query = r'''
-    mutation AddVehicle($numberPlate: String!, $nbPlaces: int!, $kilometrage: int!, $isAirConditioner: bool!, $amountExcluding: int!, $maxCharge: int, $modelId: String!, $colorId: String!, $centerId: String!, $maxSpeedAllowed: int!, $imageUri: String!, $transmissionId: int!) {
-      addVehicle(input: {$numberPlate, $nbPlaces, $kilometrage, $isAirConditioner, $amountExcluding, $maxCharge, $modelId, $colorId, $centerId, $maxSpeedAllowed, $imageUri, $transmissionId}) {
+    mutation AddVehicle($numberPlate: String!, $nbPlaces: Int!, $kilometrage: Int!, $isAirConditioner: Boolean!, $amountExcluding: Int!, $maxCharge: Int!, $modelId: Int!, $colorId: Int!, $centerId: Int!, $maxSpeedAllowed: Int!, $imageUri: String!, $transmissionId: Int!) {
+      addVehicle(input: {numberPlate: $numberPlate, nbPlaces: $nbPlaces, kilometrage: $kilometrage, isAirConditioner: $isAirConditioner, amountExcluding: $amountExcluding, maxCharge: $maxCharge, modelId: $modelId, colorId: $colorId, centerId: $centerId, maxSpeedAllowed: $maxSpeedAllowed, imageUri: $imageUri, transmissionId: $transmissionId}) {
         vehicle{
           id
             nbPlaces
@@ -114,17 +114,17 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       document: gql(query),
       variables: {
         'numberPlate': vehicle.number_plate,
-        'nbPlaces': vehicle.nb_places,
-        'kilometrage': vehicle.kilometrage,
-        'isAirConditioner': vehicle.is_air_conditioner,
+        'nbPlaces': vehicle.nb_places ?? 2,
+        'kilometrage': vehicle.kilometrage ?? 20,
+        'isAirConditioner': vehicle.is_air_conditioner ?? false,
         'amountExcluding': vehicle.amount_excluding,
-        'maxCharge': vehicle.max_charge,
+        'maxCharge': vehicle.max_charge ?? 100,
         'modelId': vehicle.model!.id,
-        'colorId': vehicle.color?.id,
-        'centerId': vehicle.center!.id,
-        'maxSpeedAllowed': vehicle.max_speed_allowed,
+        'colorId': vehicle.color?.id ?? 1,
+        'centerId': int.parse(vehicle.center!.id),
+        'maxSpeedAllowed': vehicle.max_speed_allowed ?? 20,
         'imageUri': vehicle.imageUri,
-        'transmissionId': vehicle.transmission ?? "1"
+        'transmissionId': 1
       },
     );
 
