@@ -306,4 +306,93 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       }
     });
   }
+
+  @override
+  Stream<List<Vehicle>> getVehiclesBrand(String brand) {
+    const String getBrandVehicles = r'''
+      fragment VehicleBasicInfos on Vehicle {
+        __typename
+        id
+        transmission
+        nbPlaces
+        amountExcluding
+        model {
+          id
+          name
+          releaseYear
+          brand {
+            id
+            name
+            logoUri
+          }
+        }
+        center {    
+          id     
+          name
+          address 
+          town {
+            inseeCode
+            zipCode
+            name
+          }
+        }
+        imageUri
+        kilometrage
+      }
+
+      query VehiclesBrand($brand: String){
+        search(query: {$brand}) {
+          ... on Van {
+            ... VehicleBasicInfos
+            
+          }
+          
+          ... on Sedan {
+            ... VehicleBasicInfos
+          }
+          
+          ... on Limousine {
+            ... VehicleBasicInfos
+            length
+          }
+          ... on SportCar {
+            ... VehicleBasicInfos
+            power
+          }
+          
+        }
+        }
+      }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(getBrandVehicles),
+      variables: {
+        'brand': brand,
+      },
+    );
+
+    return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
+      if (result.hasException) {
+        return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
+      } else {
+        final List<dynamic> vehicles_filter = result.data!['search'];
+        List<Vehicle> listVehicles = [];
+        for (var vehicle_search in vehicles_filter) {
+          Vehicle vehicle = Vehicle(
+            id: vehicle_search['id'],
+            transmission: vehicle_search['transmission'],
+            nb_places: vehicle_search['nbPlaces'],
+            amount_excluding: vehicle_search['amountExcluding'] ?? 0,
+            model: BrandModel.fromJson(vehicle_search['model']),
+            center: CenterVehicle.fromJson(vehicle_search['center']),
+            imageUri: vehicle_search['imageUri'] ?? "",
+            kilometrage: vehicle_search['kilometrage'],
+          );
+          listVehicles.add(vehicle);
+        }
+        return Stream.value(listVehicles);
+      }
+    });
+  }
 }

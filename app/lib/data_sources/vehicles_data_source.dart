@@ -10,4 +10,6 @@ abstract class VehiclesDataSource {
   Future<Vehicle> detailVehicle(String id);
 
   Stream<List<Vehicle>> getVehiclesFilter(String maxKm, String minPlace);
+
+  Stream<List<Vehicle>> getVehiclesBrand(String brand);
 }

@@ -17,6 +17,14 @@ class GetFilterVehicles extends VehiclesEvent {
   });
 }
 
+class GetBrandVehicles extends VehiclesEvent {
+  final String brand;
+
+  GetBrandVehicles({
+    required this.brand,
+  });
+}
+
 class AddVehicle extends VehiclesEvent {
   final Vehicle vehicle;
 

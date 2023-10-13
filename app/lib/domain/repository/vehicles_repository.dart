@@ -16,6 +16,10 @@ class VehiclesRepository {
     return vehiclesDataSource.getVehiclesFilter(maxKm, minPlace);
   }
 
+  Stream<List<Vehicle>> getVehiclesBrand(String brand) {
+    return vehiclesDataSource.getVehiclesBrand(brand);
+  }
+
   Future<void> editVehicle(Vehicle vehicle) {
     return vehiclesDataSource.editVehicle(vehicle);
   }
