@@ -3,6 +3,7 @@ import 'package:app/domain/models/brand.dart';
 import 'package:app/domain/models/brand_model.dart';
 import 'package:app/domain/models/town.dart';
 import 'package:app/domain/models/vehicles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/domain/models/centers.dart';
 import '../../domain/models/session.dart';
@@ -84,7 +85,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
     mutation AddVehicle($numberPlate: String!, $nbPlaces: int!, $kilometrage: int!, $isAirConditioner: bool!, $amountExcluding: int!, $maxCharge: int, $modelId: String!, $colorId: String!, $centerId: String!, $maxSpeedAllowed: int!, $imageUri: String!, $transmissionId: int!) {
       addVehicle(input: {$numberPlate, $nbPlaces, $kilometrage, $isAirConditioner, $amountExcluding, $maxCharge, $modelId, $colorId, $centerId, $maxSpeedAllowed, $imageUri, $transmissionId}) {
         vehicle{
-          id
+            id
             nbPlaces
             amountExcluding
             model {
@@ -241,62 +242,59 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
 
   @override
   Stream<List<Vehicle>> getVehiclesFilter(String maxKm, String minPlace) {
-        const String getFilterVehicles = r'''
-    query VehiclesFilter($maxKm: Int, $minPlace: Int){
-      vehicles (maxKilometrage: $maxKm, minimumPlaces: $minPlace) {
-        edges {
-          node {
-            id
-            transmission
-            nbPlaces
-            amountExcluding
-            model {
-              id
-              name
-              releaseYear
-              brand {
-                id
-                name
-                logoUri
-              }
+    const String getFilterVehicles = r'''
+      query VehiclesFilter($maxKm: Int, $minPlace: Int){
+        vehiclesFilter (filter: {maxKilometrage: $maxKm, minimumPlaces: $minPlace}) {
+          id
+          nbPlaces
+          amountExcluding
+          model {
+            name
+            brand {
+              logoUri
             }
-            center {    
-              id     
-              name
-              address 
-              town {
-                name
-              }
-            }
-            imageUri
-            kilometrage
           }
+          center {
+            id
+            name
+            address
+            town {
+              inseeCode
+              zipCode
+              name
+            }
+          }
+          imageUri
+          kilometrage
         }
       }
-    }
     ''';
 
     final QueryOptions options = QueryOptions(
       document: gql(getFilterVehicles),
+      variables: {
+        'maxKm': int.parse(maxKm),
+        'minPlace': int.parse(minPlace),
+      },
     );
 
     return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
       if (result.hasException) {
         return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
       } else {
-        final List<dynamic> edges = result.data!['vehicles']['edges'];
+        final List<dynamic> vehicles_filter = result.data!['vehiclesFilter'];
         List<Vehicle> listVehicles = [];
 
-        for (var edge in edges) {
+        for (var vehicle_filter in vehicles_filter) {
           Vehicle vehicle = Vehicle(
-            id: edge['node']['id'],
-            transmission: edge['node']['transmission'],
-            nb_places: edge['node']['nbPlaces'],
-            amount_excluding: edge['node']['amountExcluding'],
-            model: BrandModel.fromJson(edge['node']['model']),
-            center: CenterVehicle.fromJson(edge['node']['center']),
-            imageUri: edge['node']['imageUri'] ?? "",
-            kilometrage: edge['node']['kilometrage'],
+            id: vehicle_filter['id'],
+            transmission: vehicle_filter['transmission'] ?? "",
+            nb_places: vehicle_filter['nbPlaces'] ?? 0,
+            amount_excluding: vehicle_filter['amountExcluding'] ?? 0,
+            model: BrandModel.fromJson(vehicle_filter['model']),
+            center: CenterVehicle.fromJson(vehicle_filter['center']),
+            imageUri: vehicle_filter['imageUri'] ?? "",
+            kilometrage: vehicle_filter['kilometrage'] ?? 0,
           );
 
           listVehicles.add(vehicle);

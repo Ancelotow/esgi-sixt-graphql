@@ -7,6 +7,16 @@ class GetAllVehicles extends VehiclesEvent {
   GetAllVehicles();
 }
 
+class GetFilterVehicles extends VehiclesEvent {
+  final String maxKm;
+  final String minPlace;
+
+  GetFilterVehicles({
+    required this.maxKm,
+    required this.minPlace,
+  });
+}
+
 class AddVehicle extends VehiclesEvent {
   final Vehicle vehicle;
 

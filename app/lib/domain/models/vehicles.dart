@@ -1,4 +1,3 @@
-import 'package:app/domain/models/brand.dart';
 import 'package:app/domain/models/brand_model.dart';
 import 'package:app/domain/models/color.dart';
 import 'centers.dart';
