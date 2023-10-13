@@ -1,6 +1,7 @@
 import 'package:app/domain/models/centers.dart';
 import 'package:app/presentation/logic/centers_bloc/centers_bloc.dart';
 import 'package:app/presentation/logic/vehicles_bloc/vehicles_bloc.dart';
+import 'package:app/presentation/screen/admin/add_center_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,15 +23,27 @@ class AdminScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Centers",
-            style: GoogleFonts.montserrat(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Centers",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () => AddCenterScreen.navigateTo(context),
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ],
         ),
          Expanded(
            child: BlocBuilder<CentersBloc, CentersState>(

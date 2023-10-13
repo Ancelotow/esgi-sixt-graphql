@@ -2,16 +2,16 @@ import 'package:app/data_sources/center_data_source.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../../domain/models/centers.dart';
+import '../../domain/models/session.dart';
 
 class ApiCenterDataSource implements CenterDataSource {
-  final ValueNotifier<GraphQLClient> client;
 
-  ApiCenterDataSource(this.client);
+  ApiCenterDataSource();
 
   @override
   Future<CenterVehicle> addCenter(CenterVehicle center) async {
     const String query = r'''
-    mutation {
+    mutation AddCenter($name: String!, $address: String!, $inseeCode: String!){
       addCenter(input: {name: $name, address: $address, inseeCode: $inseeCode}) {
         center{
           id
@@ -19,7 +19,7 @@ class ApiCenterDataSource implements CenterDataSource {
           address
           town {
             inseeCode
-            address
+            zipCode
             name
           }
         }
@@ -36,7 +36,7 @@ class ApiCenterDataSource implements CenterDataSource {
       },
     );
 
-    final QueryResult result = await client.value.query(options);
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
 
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
@@ -65,7 +65,7 @@ class ApiCenterDataSource implements CenterDataSource {
     final QueryOptions options = QueryOptions(
       document: gql(query),
     );
-    final QueryResult result = await client.value.query(options);
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
