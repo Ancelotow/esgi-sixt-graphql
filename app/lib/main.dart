@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
               '/': (context) => const HomeScreen(),
               ConnexionScreen.routeName: (context) => ConnexionScreen(),
               RegisterScreen.routeName: (context) => RegisterScreen(),
-              VehicleScreen.routeName: (context) => const VehicleScreen(),
+              VehicleScreen.routeName: (context) => VehicleScreen(),
             },
             onGenerateRoute: (settings) {
               Widget content = const SizedBox.shrink();

@@ -221,4 +221,79 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
     }
      */
   }
+
+  @override
+  Stream<List<Vehicle>> getVehiclesFilter(String maxKm, String minPlace) {
+        const String getFilterVehicles = r'''
+    query VehiclesFilter($maxKm: Int, $minPlace: Int){
+      vehicles (maxKilometrage: $maxKm, minimumPlaces: $minPlace) {
+        edges {
+          node {
+            id
+            transmission
+            nbPlaces
+            amountExcluding
+            model {
+              id
+              name
+              releaseYear
+              brand {
+                logoUri
+              }
+            }
+            center {    
+              id     
+              name
+              address 
+              town {
+                name
+              }
+            }
+            imageUri
+            kilometrage
+          }
+        }
+      }
+    }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(getFilterVehicles),
+    );
+
+    return Stream.fromFuture(client.value.query(options)).asyncExpand((result) {
+      if (result.hasException) {
+        return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
+      } else {
+        final List<dynamic> edges = result.data!['vehicles']['edges'];
+        List<Vehicle> listVehicles = [];
+
+        for (var edge in edges) {
+          Vehicle vehicle = Vehicle(
+            id: edge['node']['id'],
+            transmission: edge['node']['transmission'],
+            nb_places: edge['node']['nbPlaces'],
+            amount_excluding: edge['node']['amountExcluding'],
+            brand: Brand(
+              id: edge['node']['model']['id'],
+              name: edge['node']['model']['name'],
+              logoUri: edge['node']['model']['brand']['logoUri'],
+              releaseYear: edge['node']['model']['releaseYear'],
+            ),
+            center: CenterVehicle(
+              id: edge['node']['center']['id'],
+              name: edge['node']['center']['name'],
+              address: edge['node']['center']['address'],
+              town: edge['node']['center']['town']['name'],
+            ),
+            imageUri: edge['node']['imageUri'] ?? "",
+            kilometrage: edge['node']['kilometrage'],
+          );
+
+          listVehicles.add(vehicle);
+        }
+        return Stream.value(listVehicles);
+      }
+    });
+  }
 }

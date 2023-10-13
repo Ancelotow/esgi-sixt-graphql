@@ -242,9 +242,7 @@ class _DetailCarsState extends State<DetailCars> {
             ),
           ],
         ),
-        bottomSheet: PriceAndBookNow(
-          vehicle: widget.vehicle,
-        ),
+        bottomSheet: PriceAndBookNow(vehicle: widget.vehicle),
       ),
     );
   }
@@ -252,8 +250,9 @@ class _DetailCarsState extends State<DetailCars> {
 
 class PriceAndBookNow extends StatelessWidget {
   final Vehicle vehicle;
+  final TextEditingController _addNbDaysController = TextEditingController();
 
-  const PriceAndBookNow({
+  PriceAndBookNow({
     Key? key,
     required this.vehicle,
   }) : super(key: key);
@@ -276,6 +275,18 @@ class PriceAndBookNow extends StatelessWidget {
                 const TextSpan(
                     text: '/day', style: TextStyle(color: Colors.black38)),
               ],
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 50,
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(20, 5, 0, 10),
+            child: TextField(
+              onChanged: (value) {},
+              controller: _addNbDaysController,
+              decoration: const InputDecoration(
+                  hintText: "5J"),
             ),
           ),
         ),
@@ -324,15 +335,19 @@ class PriceAndBookNow extends StatelessWidget {
 
   void _onAddRent(BuildContext context) {
     var bloc = BlocProvider.of<RentsBloc>(context);
-    final rent = Rent(
-      id: '',
-      nbDays: 5,
-      //à changer soit par formulaire ou voir !!!!!!!!!!!!!
-      amountExcluding: vehicle.amount_excluding!,
-      vehicleId: int.parse(vehicle.id),
-      status: "RENTED",
-    );
-    bloc.add(AddRent(rent: rent));
+    if (_addNbDaysController.text != "") {
+      final rent = Rent(
+        id: '',
+        nbDays: int.parse(_addNbDaysController.text),
+        amountExcluding: vehicle.amount_excluding!,
+        vehicleId: int.parse(vehicle.id),
+        status: "RENTED",
+      );
+      bloc.add(AddRent(rent: rent));
+    } else {
+      _showSnackBar(
+          context, 'Vous devez saisir le nombre de jour de location', Colors.redAccent);
+    }
   }
 
   void _showSnackBar(BuildContext context, String text, Color background) {
