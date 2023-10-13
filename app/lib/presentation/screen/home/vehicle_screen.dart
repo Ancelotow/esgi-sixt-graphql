@@ -118,7 +118,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
               _showSnackBar(context, 'Filtre ajouté', Colors.greenAccent);
               widget._minPlaceController.text = "";
               widget._maxKmController.text = "";
-              Navigator.pop(context);
+              //NavigatorScreen.navigateTo(context);
             } else if (state.status == VehiclesStatus.error) {
               debugPrint(state.error);
               _showSnackBar(context, state.error, Colors.orangeAccent);
@@ -167,16 +167,14 @@ class _VehicleScreenState extends State<VehicleScreen> {
   }
 
   void _filter(BuildContext context) {
-    debugPrint(widget._maxKmController.text);
-    debugPrint(widget._minPlaceController.text);
-    var bloc = BlocProvider.of<VehiclesBloc>(context);
-    if (widget._maxKmController.text != "" && widget._minPlaceController.text != "") {
-      bloc.add(
+    if (widget._maxKmController.text != "" &&
+        widget._minPlaceController.text != "") {
+      BlocProvider.of<VehiclesBloc>(context).add(
         GetFilterVehicles(
-          maxKm: widget._maxKmController.text,
-          minPlace: widget._minPlaceController.text,
-        ),
+            maxKm: widget._maxKmController.text,
+            minPlace: widget._minPlaceController.text),
       );
+      Navigator.of(context).pop();
     } else {
       _showSnackBar(
           context, 'Vous devez remplir les 2 champs', Colors.redAccent);

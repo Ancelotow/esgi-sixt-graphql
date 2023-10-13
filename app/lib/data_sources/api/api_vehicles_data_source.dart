@@ -246,26 +246,31 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       query VehiclesFilter($maxKm: Int, $minPlace: Int){
         vehiclesFilter (filter: {maxKilometrage: $maxKm, minimumPlaces: $minPlace}) {
           id
-          nbPlaces
-          amountExcluding
-          model {
-            name
-            brand {
-              logoUri
-            }
-          }
-          center {
-            id
-            name
-            address
-            town {
-              inseeCode
-              zipCode
+            transmission
+            nbPlaces
+            amountExcluding
+            model {
+              id
               name
+              releaseYear
+              brand {
+                id
+                name
+                logoUri
+              }
             }
-          }
-          imageUri
-          kilometrage
+            center {    
+              id     
+              name
+              address 
+              town {
+                inseeCode
+                zipCode
+                name
+              }
+            }
+            imageUri
+            kilometrage
         }
       }
     ''';
@@ -284,19 +289,17 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
       } else {
         final List<dynamic> vehicles_filter = result.data!['vehiclesFilter'];
         List<Vehicle> listVehicles = [];
-
         for (var vehicle_filter in vehicles_filter) {
           Vehicle vehicle = Vehicle(
             id: vehicle_filter['id'],
-            transmission: vehicle_filter['transmission'] ?? "",
-            nb_places: vehicle_filter['nbPlaces'] ?? 0,
+            transmission: vehicle_filter['transmission'],
+            nb_places: vehicle_filter['nbPlaces'],
             amount_excluding: vehicle_filter['amountExcluding'] ?? 0,
             model: BrandModel.fromJson(vehicle_filter['model']),
             center: CenterVehicle.fromJson(vehicle_filter['center']),
             imageUri: vehicle_filter['imageUri'] ?? "",
-            kilometrage: vehicle_filter['kilometrage'] ?? 0,
+            kilometrage: vehicle_filter['kilometrage'],
           );
-
           listVehicles.add(vehicle);
         }
         return Stream.value(listVehicles);
