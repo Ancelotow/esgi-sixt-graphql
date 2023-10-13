@@ -2,13 +2,15 @@ import 'package:app/domain/models/centers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CenterCard extends StatelessWidget {
-  final CenterVehicle center;
-  final Function(CenterVehicle)? onTap;
+import '../../domain/models/rents.dart';
 
-  const CenterCard({
+class RentCard extends StatelessWidget {
+  final Rent rent;
+  final Function(Rent)? onTap;
+
+  const RentCard({
     super.key,
-    required this.center,
+    required this.rent,
     this.onTap,
   });
 
@@ -47,12 +49,12 @@ class CenterCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          center.name!,
+                          rent.vehicle?.model?.name ?? "Unknown",
                           style: GoogleFonts.montserrat(
                               fontSize: 20, fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          "${center.town!.name}, ${center.town!.inseeCode}",
+                          "${rent.amountExcluding}€ (${rent.nbDays} days)",
                           style: GoogleFonts.montserrat(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -71,7 +73,7 @@ class CenterCard extends StatelessWidget {
             left: 15,
             child: Image.asset(
               //vehicle.imageUri
-              "assets/images/garage.png",
+              "assets/images/tesla_1.png",
               width: 150,
               height: 100,
             ),

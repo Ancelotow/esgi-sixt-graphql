@@ -13,7 +13,40 @@ class ApiRentsDataSource extends RentsDataSource {
       createRent(input: {nbDays: $nbDays, amountExcluding: $amountExcluding, vatRate: $vatRate, vehicleId: $vehicleId, status: $status}) {
         rent{
           id
+          nbDays
           amountExcluding
+          vatRate
+          rentAt
+          createdAt
+          vehicle {
+            id
+            transmission
+            nbPlaces
+            amountExcluding
+            model {
+              id
+              name
+              releaseYear
+              brand {
+                id
+                name
+                logoUri
+              }
+            }
+            center {    
+              id     
+              name
+              address 
+              town {
+                inseeCode
+                zipCode
+                name
+              }
+            }
+            imageUri
+            kilometrage
+          }
+          status
         }
       }
     }
@@ -35,7 +68,7 @@ class ApiRentsDataSource extends RentsDataSource {
     if (result.hasException) {
       throw Exception('Erreur GraphQL: ${result.exception.toString()}');
     } else {
-      final String idRent = result.data!['createRent']['rent']['amountExcluding'];
+      final String idRent = result.data!['createRent']['rent']['id'];
       return idRent;
     }
   }
@@ -53,8 +86,61 @@ class ApiRentsDataSource extends RentsDataSource {
   }
 
   @override
-  Future<List<Rent>> getAllRents() {
-    // TODO: implement getAllRents
-    throw UnimplementedError();
+  Future<List<Rent>> getAllRents() async {
+    const String query = r'''
+    query {
+      rents {
+        edges {
+          node {
+            id
+            nbDays
+            amountExcluding
+            vatRate
+            rentAt
+            createdAt
+            vehicle {
+              id
+              transmission
+              nbPlaces
+              amountExcluding
+              model {
+                id
+                name
+                releaseYear
+                brand {
+                  id
+                  name
+                  logoUri
+                }
+              }
+              center {    
+                id     
+                name
+                address 
+                town {
+                  inseeCode
+                  zipCode
+                  name
+                }
+              }
+              imageUri
+              kilometrage
+            }
+            status
+          }
+        }
+      }
+    }
+    ''';
+    final QueryOptions options = QueryOptions(
+      document: gql(query),
+    );
+    final QueryResult result = await Session.instance().getGraphQLClient().value.query(options);
+    if (result.hasException) {
+      throw Exception('Erreur GraphQL: ${result.exception.toString()}');
+    } else {
+      final rentsDto = result.data!['rents']['edges'] as List<dynamic>;
+      return rentsDto.map((node) => Rent.fromJson(node['node'])).toList();
+    }
   }
 }
