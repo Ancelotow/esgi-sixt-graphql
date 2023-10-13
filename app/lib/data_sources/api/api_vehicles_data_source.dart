@@ -3,6 +3,7 @@ import 'package:app/domain/models/brand.dart';
 import 'package:app/domain/models/brand_model.dart';
 import 'package:app/domain/models/town.dart';
 import 'package:app/domain/models/vehicles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/domain/models/centers.dart';
 import '../../domain/models/session.dart';
@@ -84,7 +85,7 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
     mutation AddVehicle($numberPlate: String!, $nbPlaces: Int!, $kilometrage: Int!, $isAirConditioner: Boolean!, $amountExcluding: Int!, $maxCharge: Int!, $modelId: Int!, $colorId: Int!, $centerId: Int!, $maxSpeedAllowed: Int!, $imageUri: String!, $transmissionId: Int!) {
       addVehicle(input: {numberPlate: $numberPlate, nbPlaces: $nbPlaces, kilometrage: $kilometrage, isAirConditioner: $isAirConditioner, amountExcluding: $amountExcluding, maxCharge: $maxCharge, modelId: $modelId, colorId: $colorId, centerId: $centerId, maxSpeedAllowed: $maxSpeedAllowed, imageUri: $imageUri, transmissionId: $transmissionId}) {
         vehicle{
-          id
+            id
             nbPlaces
             amountExcluding
             model {
@@ -241,12 +242,10 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
 
   @override
   Stream<List<Vehicle>> getVehiclesFilter(String maxKm, String minPlace) {
-        const String getFilterVehicles = r'''
-    query VehiclesFilter($maxKm: Int, $minPlace: Int){
-      vehicles (maxKilometrage: $maxKm, minimumPlaces: $minPlace) {
-        edges {
-          node {
-            id
+    const String getFilterVehicles = r'''
+      query VehiclesFilter($maxKm: Int, $minPlace: Int){
+        vehiclesFilter (filter: {maxKilometrage: $maxKm, minimumPlaces: $minPlace}) {
+          id
             transmission
             nbPlaces
             amountExcluding
@@ -265,40 +264,131 @@ class ApiVehiclesDataSource extends VehiclesDataSource {
               name
               address 
               town {
+                inseeCode
+                zipCode
                 name
               }
             }
             imageUri
             kilometrage
-          }
         }
       }
-    }
     ''';
 
     final QueryOptions options = QueryOptions(
       document: gql(getFilterVehicles),
+      variables: {
+        'maxKm': int.parse(maxKm),
+        'minPlace': int.parse(minPlace),
+      },
     );
 
     return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
       if (result.hasException) {
         return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
       } else {
-        final List<dynamic> edges = result.data!['vehicles']['edges'];
+        final List<dynamic> vehicles_filter = result.data!['vehiclesFilter'];
         List<Vehicle> listVehicles = [];
-
-        for (var edge in edges) {
+        for (var vehicle_filter in vehicles_filter) {
           Vehicle vehicle = Vehicle(
-            id: edge['node']['id'],
-            transmission: edge['node']['transmission'],
-            nb_places: edge['node']['nbPlaces'],
-            amount_excluding: edge['node']['amountExcluding'],
-            model: BrandModel.fromJson(edge['node']['model']),
-            center: CenterVehicle.fromJson(edge['node']['center']),
-            imageUri: edge['node']['imageUri'] ?? "",
-            kilometrage: edge['node']['kilometrage'],
+            id: vehicle_filter['id'],
+            transmission: vehicle_filter['transmission'],
+            nb_places: vehicle_filter['nbPlaces'],
+            amount_excluding: vehicle_filter['amountExcluding'] ?? 0,
+            model: BrandModel.fromJson(vehicle_filter['model']),
+            center: CenterVehicle.fromJson(vehicle_filter['center']),
+            imageUri: vehicle_filter['imageUri'] ?? "",
+            kilometrage: vehicle_filter['kilometrage'],
           );
+          listVehicles.add(vehicle);
+        }
+        return Stream.value(listVehicles);
+      }
+    });
+  }
 
+  @override
+  Stream<List<Vehicle>> getVehiclesBrand(String brand) {
+    const String getBrandVehicles = r'''
+      fragment VehicleBasicInfos on Vehicle {
+        __typename
+        id
+        transmission
+        nbPlaces
+        amountExcluding
+        model {
+          id
+          name
+          releaseYear
+          brand {
+            id
+            name
+            logoUri
+          }
+        }
+        center {    
+          id     
+          name
+          address 
+          town {
+            inseeCode
+            zipCode
+            name
+          }
+        }
+        imageUri
+        kilometrage
+      }
+
+      query VehiclesBrand($brand: String){
+        search(query: {$brand}) {
+          ... on Van {
+            ... VehicleBasicInfos
+            
+          }
+          
+          ... on Sedan {
+            ... VehicleBasicInfos
+          }
+          
+          ... on Limousine {
+            ... VehicleBasicInfos
+            length
+          }
+          ... on SportCar {
+            ... VehicleBasicInfos
+            power
+          }
+          
+        }
+        }
+      }
+    ''';
+
+    final QueryOptions options = QueryOptions(
+      document: gql(getBrandVehicles),
+      variables: {
+        'brand': brand,
+      },
+    );
+
+    return Stream.fromFuture(Session.instance().getGraphQLClient().value.query(options)).asyncExpand((result) {
+      if (result.hasException) {
+        return Stream.error('Erreur GraphQL: ${result.exception.toString()}');
+      } else {
+        final List<dynamic> vehicles_filter = result.data!['search'];
+        List<Vehicle> listVehicles = [];
+        for (var vehicle_search in vehicles_filter) {
+          Vehicle vehicle = Vehicle(
+            id: vehicle_search['id'],
+            transmission: vehicle_search['transmission'],
+            nb_places: vehicle_search['nbPlaces'],
+            amount_excluding: vehicle_search['amountExcluding'] ?? 0,
+            model: BrandModel.fromJson(vehicle_search['model']),
+            center: CenterVehicle.fromJson(vehicle_search['center']),
+            imageUri: vehicle_search['imageUri'] ?? "",
+            kilometrage: vehicle_search['kilometrage'],
+          );
           listVehicles.add(vehicle);
         }
         return Stream.value(listVehicles);

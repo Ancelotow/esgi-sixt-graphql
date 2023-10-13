@@ -23,6 +23,30 @@ class VehiclesBloc extends Bloc<VehiclesEvent, VehiclesState> {
       }
     });
 
+    on<GetFilterVehicles>((event, emit) async {
+      try {
+        emit(state.copyWith(status: VehiclesStatus.loading));
+        await for (var vehicles in repository.getVehiclesFilter(event.maxKm, event.minPlace)) {
+          emit(state.copyWith(vehicles: vehicles, status: VehiclesStatus.success));
+        }
+      } catch (e) {
+        String errorMessage = e.toString().replaceAll('Exception: ', '');
+        emit(state.copyWith(error: errorMessage, status: VehiclesStatus.error));
+      }
+    });
+
+    on<GetBrandVehicles>((event, emit) async {
+      try {
+        emit(state.copyWith(status: VehiclesStatus.loading));
+        await for (var vehicles in repository.getVehiclesBrand(event.brand)) {
+          emit(state.copyWith(vehicles: vehicles, status: VehiclesStatus.success));
+        }
+      } catch (e) {
+        String errorMessage = e.toString().replaceAll('Exception: ', '');
+        emit(state.copyWith(error: errorMessage, status: VehiclesStatus.error));
+      }
+    });
+
     on<AddVehicle>((event, emit) async {
       emit(state.copyWith(status: VehiclesStatus.loading));
       try {

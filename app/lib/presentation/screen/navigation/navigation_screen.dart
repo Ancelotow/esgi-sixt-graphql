@@ -4,8 +4,6 @@ import 'package:app/presentation/screen/home/vehicle_screen.dart';
 import 'package:app/presentation/screen/profile/profil_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../signIn_signUp/home_screen.dart';
-
 class NavigatorScreen extends StatefulWidget {
   static const String routeName = '/NavigatorScreen';
 

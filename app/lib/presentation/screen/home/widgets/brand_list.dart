@@ -1,3 +1,5 @@
+import 'package:app/presentation/logic/vehicles_bloc/vehicles_bloc.dart';
+import 'package:app/presentation/screen/navigation/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,11 +20,19 @@ class _BrandListState extends State<BrandList> {
   List<Brand> brands = [];
   int _brandCategoryIndex = 0;
 
-
-  void setBrandIndex(int currentIndex) {
+  void setBrandIndex(int currentIndex, String brand) {
     setState(() {
       _brandCategoryIndex = currentIndex;
     });
+    if (brand == "all") {
+      BlocProvider.of<VehiclesBloc>(context).add(GetAllVehicles());
+      NavigatorScreen.navigateTo(context);
+    } else {
+      BlocProvider.of<VehiclesBloc>(context).add(
+        GetBrandVehicles(brand: brand),
+      );
+      NavigatorScreen.navigateTo(context);
+    }
   }
 
   @override
@@ -74,7 +84,7 @@ class _BrandListState extends State<BrandList> {
       itemBuilder: (context, index) {
         if (index == 0) {
           return GestureDetector(
-            onTap: () => setBrandIndex(index),
+            onTap: () => setBrandIndex(index, "All"),
             child: BrandItem(
               brand: brands[index],
               index: 0,
@@ -83,7 +93,7 @@ class _BrandListState extends State<BrandList> {
           );
         } else {
           return GestureDetector(
-            onTap: () => setBrandIndex(index),
+            onTap: () => setBrandIndex(index, brands[index].name),
             child: BrandItem(
               brand: brands[index],
               index: index,
@@ -95,5 +105,3 @@ class _BrandListState extends State<BrandList> {
     );
   }
 }
-
-
