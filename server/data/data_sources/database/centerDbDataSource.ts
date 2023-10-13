@@ -7,7 +7,7 @@ import UpdateCenterDto from "../../models/dto/updateCenterDto";
 class CenterDbDataSource {
 
     async get(): Promise<Array<CenterDao>> {
-        const query = new Query('SELECT id, name, address, insee_code, is_delete FROM center')
+        const query = new Query('SELECT id, name, address, insee_code, is_delete FROM center WHERE is_delete = false')
         const result = await dbService.dbClient.execute(query);
         return result.rows.map(
             (row: any) => new CenterDao(row[0], row[1], row[2], row[3], row[4])

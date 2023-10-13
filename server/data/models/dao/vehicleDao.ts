@@ -8,13 +8,18 @@ class VehicleDao {
         public kilometrage: number,
         public is_air_conditioner: boolean,
         public amount_excluding: number,
-        public max_charge: number,
-        public max_speed_allowed: number,
+        public max_charge: number, // For Van
+        public max_speed_allowed: number, // For Van
         public model_id: number,
         public color_id: number,
         public center_id: number,
         public transmission_id: number,
         public image_uri: string,
+        public capacity: number, // For Van
+        public height: number, // For Van
+        public length: number, // For Limousine
+        public power: number, // For SportCar
+        public is_delete: boolean,
     ) {}
 
     toEntity() {
@@ -32,6 +37,11 @@ class VehicleDao {
         vehicle.centerId = this.center_id
         vehicle.transmissionId = this.transmission_id
         vehicle.imageUri = this.image_uri
+        vehicle.capacity = this.capacity
+        vehicle.height = this.height
+        vehicle.length = this.length
+        vehicle.power = this.power
+        vehicle.isDelete = this.is_delete
         return vehicle
     }
 }

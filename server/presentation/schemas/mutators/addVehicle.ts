@@ -1,5 +1,5 @@
 import {mutationWithClientMutationId} from "graphql-relay";
-import {GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLString} from "graphql";
+import {GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLNonNull, GraphQLString} from "graphql";
 import VehicleController from "../../../domain/controllers/vehicleController";
 import AddVehicleDto from "../../../data/models/dto/addVehicleDto";
 import vehicleInterface from "../interfaces/Vehicle";
@@ -14,13 +14,17 @@ const addVehicleType = mutationWithClientMutationId({
         kilometrage: { type: GraphQLNonNull(GraphQLInt) },
         isAirConditioner: { type: GraphQLNonNull(GraphQLBoolean) },
         amountExcluding: { type: GraphQLNonNull(GraphQLInt) },
-        maxCharge: { type: GraphQLNonNull(GraphQLInt) },
-        maxSpeedAllowed: { type: GraphQLNonNull(GraphQLInt) },
         modelId: { type: GraphQLNonNull(GraphQLInt) },
         colorId: { type: GraphQLNonNull(GraphQLInt) },
         centerId: { type: GraphQLNonNull(GraphQLInt) },
         transmissionId: { type: GraphQLNonNull(GraphQLInt) },
         imageUri: { type: GraphQLNonNull(GraphQLString) },
+        maxCharge: { type: GraphQLInt },
+        maxSpeedAllowed: { type: GraphQLInt },
+        capacity: { type: GraphQLInt },
+        height: { type: GraphQLFloat },
+        length: { type: GraphQLFloat },
+        power: { type: GraphQLInt },
     },
     outputFields: {
         vehicle: {type: vehicleInterface},
@@ -41,6 +45,10 @@ const addVehicleType = mutationWithClientMutationId({
         vehicleDto.center_id = input.centerId;
         vehicleDto.transmission_id = input.transmissionId;
         vehicleDto.image_uri = input.imageUri;
+        vehicleDto.capacity = input.capacity;
+        vehicleDto.height = input.height;
+        vehicleDto.length = input.length;
+        vehicleDto.power = input.power;
         let vehicleAdded = await VehicleController.addVehicle(vehicleDto);
         return {vehicle: vehicleAdded};
     },

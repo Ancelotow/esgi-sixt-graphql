@@ -6,7 +6,8 @@ import {
     GraphQLObjectType,
     GraphQLInputType,
     GraphQLInputObjectType,
-    GraphQLError
+    GraphQLError,
+    GraphQLString
 } from "graphql";
 import {brandType} from "./types/brandType";
 import {typeVehicleType} from "./types/typeVehicleType";
@@ -28,6 +29,8 @@ import {rentConnection} from "./connection/rentConnection";
 import {vehicleConnection} from "./connection/vehicleConnection";
 import VehicleFilter from './inputs/VehicleFilterInput';
 import vehicleInterface from "./interfaces/Vehicle";
+import SearchResultItem from "./unions/SearchResultItem";
+import searchController from "../../domain/controllers/searchController";
 
 export default new GraphQLObjectType({
     name: 'Query',
@@ -106,6 +109,17 @@ export default new GraphQLObjectType({
                     arrayLength: rents.length,
                 })
             }
-        }
+        },
+        search: {
+            type: new GraphQLNonNull(new GraphQLList(SearchResultItem)),
+            args: {
+              query: {
+                type: new GraphQLNonNull(GraphQLString)
+              }
+            },
+            resolve: async (_, args, context) => {
+                return await searchController.filter(args.query);
+            }
+          },
     }
 });

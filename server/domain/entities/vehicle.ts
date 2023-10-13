@@ -12,6 +12,11 @@ class Vehicle {
     centerId: number
     transmissionId: number
     imageUri: string
+    capacity: number // For Van
+    height: number // For Van
+    length: number // For Limousine
+    power: number // For SportCar
+    isDelete: boolean
 }
 
 export default Vehicle
