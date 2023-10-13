@@ -1,125 +1,189 @@
+import 'package:app/data_sources/api/api_brand_data_source.dart';
+import 'package:app/data_sources/api/api_center_data_source.dart';
+import 'package:app/data_sources/api/api_rents_data_source.dart';
+import 'package:app/data_sources/api/api_town_data_source.dart';
+import 'package:app/domain/repository/brand_model_repository.dart';
+import 'package:app/domain/repository/center_repository.dart';
+import 'package:app/domain/repository/rents_repository.dart';
+import 'package:app/domain/repository/town_repository.dart';
+import 'package:app/presentation/logic/brands_bloc/brands_bloc.dart';
+import 'package:app/presentation/logic/centers_bloc/centers_bloc.dart';
+import 'package:app/presentation/logic/colors_bloc/colors_bloc.dart';
+import 'package:app/presentation/logic/models_bloc/models_bloc.dart';
+import 'package:app/presentation/logic/rents_bloc/rents_bloc.dart';
+import 'package:app/presentation/logic/town_bloc/towns_bloc.dart';
+import 'package:app/presentation/logic/users_bloc/users_bloc.dart';
+import 'package:app/presentation/logic/vehicles_bloc/vehicles_bloc.dart';
+import 'package:app/presentation/screen/admin/add_center_screen.dart';
+import 'package:app/presentation/screen/admin/add_vehicle_screen.dart';
+import 'package:app/presentation/screen/home/vehicle_screen.dart';
+import 'package:app/presentation/screen/navigation/navigation_screen.dart';
+import 'package:app/presentation/signIn_signUp/connexion_screen.dart';
+import 'package:app/presentation/signIn_signUp/home_screen.dart';
+import 'package:app/presentation/signIn_signUp/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hive/hive.dart';
+import 'data_sources/api/api_brand_model_data_source.dart';
+import 'data_sources/api/api_color_data_source.dart';
+import 'data_sources/api/api_users_data_source.dart';
+import 'data_sources/api/api_vehicles_data_source.dart';
+import 'domain/models/session.dart';
+import 'domain/models/users.dart';
+import 'domain/repository/brand_repository.dart';
+import 'domain/repository/color_repository.dart';
+import 'domain/repository/users_repository.dart';
+import 'domain/repository/vehicles_repository.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await dotenv.load(fileName: "assets/.env");
+  await initHiveForFlutter();
+  await Hive.openBox('SixtGi');
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final User? user;
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  MyApp({Key? key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<UsersRepository>(
+          create: (context) => UsersRepository(
+            userDataSource: ApiUsersDataSource(),
+          ),
+        ),
+        RepositoryProvider<VehiclesRepository>(
+          create: (context) => VehiclesRepository(
+            vehiclesDataSource: ApiVehiclesDataSource(),
+          ),
+        ),
+        RepositoryProvider<RentsRepository>(
+          create: (context) => RentsRepository(
+            rentDataSource: ApiRentsDataSource(),
+          ),
+        ),
+        RepositoryProvider<BrandRepository>(
+          create: (context) => BrandRepository(
+            brandDataSource: ApiBrandDataSource(),
+          ),
+        ),
+        RepositoryProvider<CenterRepository>(
+          create: (context) => CenterRepository(
+            centerDataSource: ApiCenterDataSource(),
+          ),
+        ),
+        RepositoryProvider<TownRepository>(
+          create: (context) => TownRepository(
+            townDataSource: ApiTownDataSource(),
+          ),
+        ),
+        RepositoryProvider<ColorRepository>(
+          create: (context) => ColorRepository(
+            colorDataSource: ApiColorDataSource(),
+          ),
+        ),
+        RepositoryProvider<BrandModelRepository>(
+          create: (context) => BrandModelRepository(
+            brandModelDataSource: ApiBrandModelDataSource(),
+          ),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<UsersBloc>(
+            create: (context) => UsersBloc(
+              RepositoryProvider.of<UsersRepository>(context),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          BlocProvider<VehiclesBloc>(
+            create: (context) => VehiclesBloc(
+              repository: RepositoryProvider.of<VehiclesRepository>(context),
             ),
-          ],
+          ),
+          BlocProvider<RentsBloc>(
+            create: (context) => RentsBloc(
+              RepositoryProvider.of<RentsRepository>(context),
+            ),
+          ),
+          BlocProvider<BrandsBloc>(
+            create: (context) => BrandsBloc(
+              repository: RepositoryProvider.of<BrandRepository>(context),
+            ),
+          ),
+          BlocProvider<CentersBloc>(
+            create: (context) => CentersBloc(
+              repository: RepositoryProvider.of<CenterRepository>(context),
+            ),
+          ),
+          BlocProvider<TownsBloc>(
+            create: (context) => TownsBloc(
+              repository: RepositoryProvider.of<TownRepository>(context),
+            ),
+          ),
+          BlocProvider<ColorsBloc>(
+            create: (context) => ColorsBloc(
+              repository: RepositoryProvider.of<ColorRepository>(context),
+            ),
+          ),
+          BlocProvider<ModelsBloc>(
+            create: (context) => ModelsBloc(
+              repository: RepositoryProvider.of<BrandModelRepository>(context),
+            ),
+          ),
+        ],
+        child: GraphQLProvider(
+          client: Session.instance().getGraphQLClient(),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodySmall: TextStyle(
+                  fontSize: 20,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              appBarTheme: const AppBarTheme(
+                iconTheme: IconThemeData(color: Colors.black),
+                color: Color(0xFFf9ffff), //<-- SEE HERE
+              ),
+            ),
+            routes: {
+              '/': (context) => const HomeScreen(),
+              ConnexionScreen.routeName: (context) => ConnexionScreen(),
+              RegisterScreen.routeName: (context) => RegisterScreen(),
+              NavigatorScreen.routeName: (context) => const NavigatorScreen(),
+              VehicleScreen.routeName: (context) => VehicleScreen(),
+              AddCenterScreen.routeName: (context) => AddCenterScreen(),
+              AddVehicleScreen.routeName: (context) => AddVehicleScreen(),
+            },
+            onGenerateRoute: (settings) {
+              Widget content = const SizedBox.shrink();
+              switch (settings.name) {
+                /*
+                          case ProfilScreen.routeName:
+                    final arguments = settings.arguments;
+                    if (arguments is User) {
+                      content = ProfilScreen(user: arguments);
+                    }
+                    break;
+                             */
+              }
+              return MaterialPageRoute(
+                builder: (context) {
+                  return content;
+                },
+              );
+            },
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -1,6 +1,6 @@
-# esgi_sixt_app
+# app
 
-Application mobile Flutter pour la location de voiture
+A new Flutter project.
 
 ## Getting Started
 
