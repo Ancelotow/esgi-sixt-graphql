@@ -1,5 +1,5 @@
 import {mutationWithClientMutationId} from "graphql-relay";
-import {GraphQLInt, GraphQLNonNull} from "graphql";
+import {GraphQLFloat, GraphQLInt, GraphQLNonNull} from "graphql";
 import RentController from "../../../domain/controllers/rentController";
 import {rentType} from "../types/rentType";
 import CreateRentDto from "../../../data/models/dto/createRentDto";
@@ -14,7 +14,7 @@ const createRentType = mutationWithClientMutationId({
     inputFields: {
         nbDays: { type: GraphQLNonNull(GraphQLInt) },
         amountExcluding: { type: GraphQLNonNull(GraphQLInt) },
-        vatRate: { type: GraphQLNonNull(GraphQLInt) },
+        vatRate: { type: GraphQLNonNull(GraphQLFloat) },
         vehicleId: { type: GraphQLNonNull(GraphQLInt) },
         status: { type: GraphQLNonNull(statusType) },
     },
