@@ -24,14 +24,29 @@ class SearchController {
             this.models = await this._modelRepository.getAll();
         }
 
-        let modelFiltered = this.models.filter( model => model.name.toLowerCase().includes(prompt.toLowerCase())).map( model => model.id);
+        let modelFiltered = this.models.filter( model => prompt.toLowerCase().includes(model.name.toLowerCase())).map( model => model.id);
         console.log(modelFiltered.length);
         if (modelFiltered.length == 0) { modelFiltered = null }
 
-        return this.vehicles.filter(vehicle => 
-            (modelFiltered?.includes(vehicle.modelId) ?? true) //||
-            //this.isOfType(prompt, vehicle)
-        );
+        if (modelFiltered != null && this.isQueryType(prompt)) {
+            return this.vehicles.filter(vehicle => 
+                modelFiltered.includes(vehicle.modelId) &&
+                this.isOfType(prompt, vehicle)
+            );
+        }
+        if (modelFiltered != null && !this.isQueryType(prompt)) {
+            return this.vehicles.filter(vehicle => 
+                modelFiltered.includes(vehicle.modelId)
+            );
+        }
+
+        if (modelFiltered == null && this.isQueryType(prompt)) {
+            return this.vehicles.filter(vehicle => 
+                this.isOfType(prompt, vehicle)
+            );
+        }
+
+        return this.vehicles
     }
 
     private isOfType(query: string, obj: Vehicle): boolean {
@@ -44,7 +59,11 @@ class SearchController {
         if (query.toLowerCase().includes('sportcar')) {
             return (obj.power != null);
         }
-        return true
+        return (query.toLowerCase().includes('sedan'))
+    }
+
+    private isQueryType(query: string): boolean {
+        return (query.toLowerCase().includes('limousine') || query.toLowerCase().includes('van') || query.toLowerCase().includes('sportcar') || query.toLowerCase().includes('sedan'));
     }
 
 }
