@@ -3,11 +3,11 @@ class Rent {
   final int nbDays;
   final int amountExcluding;
   final int? vatRate;
-  final String rentAt;
-  final String createdAt;
+  final String? rentAt;
+  final String? createdAt;
   final int vehicleId;
-  final int userId;
-  final int statusId;
+  final int? userId;
+  final String status;
 
 
   Rent({
@@ -15,11 +15,11 @@ class Rent {
     required this.nbDays,
     required this.amountExcluding,
     this.vatRate,
-    required this.rentAt,
-    required this.createdAt,
+    this.rentAt,
+    this.createdAt,
     required this.vehicleId,
-    required this.userId,
-    required this.statusId,
+    this.userId,
+    required this.status,
   });
 
   Rent copyWith({
@@ -31,7 +31,7 @@ class Rent {
     String? createdAt,
     int? vehicleId,
     int? userId,
-    int? statusId,
+    String? status,
   }) {
     return Rent(
       id: id ?? this.id,
@@ -42,7 +42,7 @@ class Rent {
       createdAt: createdAt ?? this.createdAt,
       vehicleId: vehicleId ?? this.vehicleId,
       userId: userId ?? this.userId,
-      statusId: statusId ?? this.statusId,
+      status: status ?? this.status,
     );
   }
 }

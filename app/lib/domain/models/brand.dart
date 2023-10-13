@@ -6,7 +6,7 @@ class Brand {
   Brand({
     required this.id,
     required this.name,
-    required this.logoUri,
+    required this.logoUri
   });
 
   factory Brand.fromJson(Map<String, dynamic> json) {

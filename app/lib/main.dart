@@ -2,9 +2,9 @@ import 'package:app/data_sources/api/api_brand_data_source.dart';
 import 'package:app/data_sources/api/api_center_data_source.dart';
 import 'package:app/data_sources/api/api_rents_data_source.dart';
 import 'package:app/data_sources/api/api_town_data_source.dart';
-import 'package:app/data_sources/town_data_source.dart';
 import 'package:app/domain/repository/center_repository.dart';
 import 'package:app/domain/repository/rents_repository.dart';
+import 'package:app/domain/repository/town_repository.dart';
 import 'package:app/presentation/logic/brands_bloc/brands_bloc.dart';
 import 'package:app/presentation/logic/centers_bloc/centers_bloc.dart';
 import 'package:app/presentation/logic/rents_bloc/rents_bloc.dart';
@@ -17,11 +17,9 @@ import 'package:app/presentation/screen/navigation/navigation_screen.dart';
 import 'package:app/presentation/signIn_signUp/connexion_screen.dart';
 import 'package:app/presentation/signIn_signUp/home_screen.dart';
 import 'package:app/presentation/signIn_signUp/register_screen.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gql_dio_link/gql_dio_link.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
 import 'data_sources/api/api_users_data_source.dart';
@@ -30,6 +28,7 @@ import 'domain/models/session.dart';
 import 'domain/models/users.dart';
 import 'domain/repository/brand_repository.dart';
 import 'domain/repository/town_repository.dart';
+import 'domain/repository/brand_repository.dart';
 import 'domain/repository/users_repository.dart';
 import 'domain/repository/vehicles_repository.dart';
 
@@ -135,7 +134,7 @@ class MyApp extends StatelessWidget {
               ConnexionScreen.routeName: (context) => ConnexionScreen(),
               RegisterScreen.routeName: (context) => RegisterScreen(),
               NavigatorScreen.routeName: (context) => const NavigatorScreen(),
-              VehicleScreen.routeName: (context) => const VehicleScreen(),
+              VehicleScreen.routeName: (context) => VehicleScreen(),
               AddCenterScreen.routeName: (context) => AddCenterScreen(),
             },
             onGenerateRoute: (settings) {

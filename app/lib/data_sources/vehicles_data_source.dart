@@ -8,4 +8,6 @@ abstract class VehiclesDataSource {
   Future<void> editVehicle(Vehicle vehicle);
 
   Future<Vehicle> detailVehicle(String id);
+
+  Stream<List<Vehicle>> getVehiclesFilter(String maxKm, String minPlace);
 }

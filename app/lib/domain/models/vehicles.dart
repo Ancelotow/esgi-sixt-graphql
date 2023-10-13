@@ -1,3 +1,5 @@
+import 'package:app/domain/models/brand.dart';
+import 'package:app/domain/models/brand_model.dart';
 import 'centers.dart';
 
 class Vehicle {
@@ -9,11 +11,10 @@ class Vehicle {
   final int? amount_excluding;
   final int? max_charge;
   final int? max_speed_allowed;
-  final String? model;
-  final String? brandUri;
+  final BrandModel? model;
   final String? color;
   final CenterVehicle? center;
-  final int? transmission_id;
+  final String? transmission;
   final String? imageUri;
 
 
@@ -27,10 +28,9 @@ class Vehicle {
     this.max_charge,
     this.max_speed_allowed,
     this.model,
-    this.brandUri,
     this.color,
     this.center,
-    this.transmission_id,
+    this.transmission,
     this.imageUri,
   });
 
@@ -43,11 +43,10 @@ class Vehicle {
     int? amount_excluding,
     int? max_charge,
     int? max_speed_allowed,
-    String? model,
-    String? brandUri,
+    BrandModel? model,
     String? color,
     CenterVehicle? center,
-    int? transmission_id,
+    String? transmission,
     String? imageUri,
   }) {
     return Vehicle(
@@ -60,10 +59,9 @@ class Vehicle {
       max_charge: max_charge ?? this.max_charge,
       max_speed_allowed: max_speed_allowed ?? this.max_speed_allowed,
       model: model ?? this.model,
-      brandUri: brandUri ?? this.brandUri,
       color: color ?? this.color,
       center: center ?? this.center,
-      transmission_id: transmission_id ?? this.transmission_id,
+      transmission: transmission ?? this.transmission,
       imageUri: imageUri ?? this.imageUri,
     );
   }
